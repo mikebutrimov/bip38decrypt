@@ -1,7 +1,11 @@
 package org.unhack.bip38decrypt;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -18,19 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 736;
     private ViewPager viewPager;
     public static Handler mSwipeHandler;
     public static final String TABNUMBER = "tab_number";
@@ -38,12 +30,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //check for camera permission
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_CAMERA);
+        }
+        
         mSwipeHandler  = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 viewPager.setCurrentItem(msg.getData().getInt(TABNUMBER));
             }
         };
-
         setContentView(R.layout.activity_main);
         initPaging();
     }
@@ -85,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(pagerAdapter);
     }
-
 
 
 }

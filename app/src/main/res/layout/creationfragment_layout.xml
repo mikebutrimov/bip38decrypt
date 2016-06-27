@@ -21,24 +21,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/textView"
+            android:text="@string/decode_button"
+            android:id="@+id/textView_decode"
+            android:gravity="center"
             android:layout_weight="1"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/textView2"
+            android:text="@string/reencode_button"
+            android:id="@+id/textView2_reencode"
+            android:gravity="center"
             android:layout_weight="1"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/textView3"
+            android:text="@string/create_button"
+            android:id="@+id/textView3_create"
+            android:gravity="center"
             android:layout_weight="1"/>
 
     </LinearLayout>
@@ -56,6 +59,7 @@
         <ProgressBar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/progressBar2" />
+            android:id="@+id/progressBar2"
+            android:indeterminate="false" />
     </LinearLayout>
 </RelativeLayout>
