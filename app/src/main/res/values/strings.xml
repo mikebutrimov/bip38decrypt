@@ -6,4 +6,9 @@
     <string name="decode_button">Decode</string>
     <string name="reencode_button">Reencode</string>
     <string name="create_button">Create</string>
+    <string name="mDialogBuilder">Enter password</string>
+    <string name="checkBoxShowPassword">Show content</string>
+    <string name="noPassword">Password must be set</string>
+    <string name="noPassword2">Second password must not be empty</string>
+
 </resources>

@@ -45,11 +45,9 @@ public class MixedPagerAdapter extends FragmentPagerAdapter {
     public static void NavigateToTab(int tabId){
         Bundle data = new Bundle();
         Message msg = new Message();
-        Message msg2 = new Message();
         data.putInt(MainActivity.TABNUMBER, tabId);
         msg.setData(data);
         MainActivity.mSwipeHandler.sendMessage(msg);
-        StartCreationFragment.startCreationFragmentHandler.sendMessage(msg2);
     }
 
 }

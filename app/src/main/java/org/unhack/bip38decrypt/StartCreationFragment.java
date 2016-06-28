@@ -32,18 +32,33 @@ public class StartCreationFragment extends mFragment implements imFragment {
 
         startCreationFragmentHandler = new Handler(){
             public void handleMessage(android.os.Message msg) {
-               setMode(true);
+                if (msg.getData().getBoolean("working")){
+                    setMode(true);
+                }
+                else {
+                    setMode(false);
+                }
             }
         };
 
         View view = inflater.inflate(R.layout.creationfragment_layout, container, false);
         TextView tv_decode = (TextView) view.findViewById(R.id.textView_decode);
+        TextView tv_reencode = (TextView) view.findViewById(R.id.textView2_reencode);
         tv_decode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MainActivity.reencrypt = false;
                 scanQr();
             }
         });
+        tv_reencode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.reencrypt = true;
+                scanQr();
+            }
+        });
+
         mView = view;
         return view;
     }
@@ -64,6 +79,7 @@ public class StartCreationFragment extends mFragment implements imFragment {
     public void scanQr(){
         IntentIntegrator integrator = new IntentIntegrator(getActivity());
         integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(false);
         integrator.setDesiredBarcodeFormats(integrator.QR_CODE_TYPES);
         integrator.setPrompt("Place qr-code into the scanner area");
         integrator.initiateScan();
