@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.unhack.bip38decrypt">
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -23,7 +24,17 @@
 
         <service
             android:name=".bip38service"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".DecodeActivity"
+            android:label="@string/title_activity_decode"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.unhack.bip38decrypt.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

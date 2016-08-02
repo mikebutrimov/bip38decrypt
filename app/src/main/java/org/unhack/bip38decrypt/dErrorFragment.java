@@ -1,0 +1,28 @@
+package org.unhack.bip38decrypt;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+/**
+ * Created by unhack on 7/28/16.
+ */
+public class dErrorFragment extends mFragment implements imFragment {
+    TextView textView_error;
+    Button button_oops;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.decode_step_error, container, false);
+        textView_error = (TextView) view.findViewById(R.id.textView_error);
+        button_oops = (Button) view.findViewById(R.id.button_oops);
+
+        textView_error.setText(getArguments().getString("error"));
+
+        return view;
+
+    }
+}

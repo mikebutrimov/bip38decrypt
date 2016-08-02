@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 import net.bither.bitherj.crypto.DumpedPrivateKey;
 import net.bither.bitherj.crypto.ECKey;
@@ -14,11 +15,13 @@ import net.bither.bitherj.exception.AddressFormatException;
 
 public class bip38service extends IntentService {
     private String res,wallet,address;
+    public static  boolean IAM = false;
     public bip38service() {
         super("bip38service");
     }
     @Override
     protected void onHandleIntent(Intent intent) {
+        IAM = true;
         Bundle data = new Bundle();
         data.putBoolean("working",true);
         Message msg = new Message();
@@ -40,8 +43,20 @@ public class bip38service extends IntentService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (AddressFormatException e) {
+            Bundle errData = new Bundle();
+            errData.putString("error","Wrong address");
+            Message errMsg = new Message();
+            errMsg.setData(errData);
+            MainActivity.mErrorHandler.sendMessage(errMsg);
             e.printStackTrace();
+        } catch (NullPointerException e){
+            Bundle errData = new Bundle();
+            errData.putString("error","Wrong password / decryption failure");
+            Message errMsg = new Message();
+            errMsg.setData(errData);
+            MainActivity.mErrorHandler.sendMessage(errMsg);
         }
+
         if (result != null) {
             res = result.toString();
             Log.d("Service res",res);
@@ -57,12 +72,18 @@ public class bip38service extends IntentService {
                 e.printStackTrace();
             }
         }
-
         msg = new Message();
-        data.putBoolean("working",false);
-        data.putString("addr",address);
-        data.putString("res",res);
+        data.putBoolean("working", false);
+        data.putString("addr", address);
+        data.putString("res", res);
         msg.setData(data);
-        MainActivity.mQrCreatreHandler.sendMessage(msg);
+
+        if (res != null) {
+            MainActivity.mQrCreatreHandler.sendMessage(msg);
+        }
+        else {
+            StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
+        }
+        IAM = false;
     }
 }

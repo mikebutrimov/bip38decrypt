@@ -2,12 +2,15 @@ package org.unhack.bip38decrypt;
 
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +50,19 @@ public class StartCreationFragment extends mFragment implements imFragment {
         tv_decode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.reencrypt = false;
-                scanQr();
+                Intent decode_activity_intent = new Intent(getContext(), DecodeActivity.class);
+                decode_activity_intent.putExtra(MainActivity.WORKING_MODE,MainActivity.DECODE);
+                startActivity(decode_activity_intent);
             }
         });
         tv_reencode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.reencrypt = true;
-                scanQr();
+                Intent decode_activity_intent = new Intent(getContext(), DecodeActivity.class);
+                decode_activity_intent.putExtra(MainActivity.WORKING_MODE,MainActivity.REENDCODE);
+                startActivity(decode_activity_intent);
             }
         });
-
         mView = view;
         return view;
     }
@@ -76,12 +80,22 @@ public class StartCreationFragment extends mFragment implements imFragment {
         }
     }
 
-    public void scanQr(){
-        IntentIntegrator integrator = new IntentIntegrator(getActivity());
-        integrator.setOrientationLocked(false);
-        integrator.setBeepEnabled(false);
-        integrator.setDesiredBarcodeFormats(integrator.QR_CODE_TYPES);
-        integrator.setPrompt("Place qr-code into the scanner area");
-        integrator.initiateScan();
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        try {
+            if (bip38service.IAM) {
+                setMode(true);
+            } else {
+                setMode(false);
+            }
+        }
+        catch (Exception e){
+            //in case of emergency - fubar
+            setMode(false);
+        }
     }
+
 }

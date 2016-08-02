@@ -10,5 +10,15 @@
     <string name="checkBoxShowPassword">Show content</string>
     <string name="noPassword">Password must be set</string>
     <string name="noPassword2">Second password must not be empty</string>
+    <string name="title_activity_decode">DecodeActivity</string>
+    <string name="edittext_encoded">Encoded</string>
+    <string name="edittext_passphrase">Passphrase</string>
+    <string name="textview_decoding">Decoding</string>
+
+    <string name="button_next">Next</string>
+    <string name="button_back">Back</string>
+    <string name="button_oops">Oops</string>
+    <string name="button_cancel">Cancel</string>
+
 
 </resources>

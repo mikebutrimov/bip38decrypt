@@ -30,11 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/fab_del"
         android:layout_alignRight="@+id/fab_add"
-        android:layout_alignEnd="@+id/fab_add" />
+        android:layout_alignEnd="@+id/fab_add"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/fab_del" />
 
 </RelativeLayout>
