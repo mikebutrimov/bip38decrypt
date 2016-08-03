@@ -20,11 +20,13 @@ import com.google.zxing.integration.android.IntentResult;
  */
 public class dInputFragment extends mFragment implements imFragment {
     public static Handler updateWallet;
+    private boolean fired = false;
     EditText edittext_wallet, edittext_passphrase;
     CheckBox checkbox_showcontent;
     Button button_back, button_next;
     ImageButton button_scan;
     Bundle mBundle;
+
 
 
     @Override
@@ -70,6 +72,17 @@ public class dInputFragment extends mFragment implements imFragment {
                 scanQr();
             }
         });
+
+        if (!fired){
+            fired = true;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    scanQr();
+                }
+            });
+        }
+
         return view;
     }
 
@@ -84,7 +97,7 @@ public class dInputFragment extends mFragment implements imFragment {
 
     public void scanQr(){
         IntentIntegrator integrator = new IntentIntegrator(getActivity());
-        integrator.setOrientationLocked(true);
+        integrator.setOrientationLocked(false);
         integrator.setBeepEnabled(false);
         integrator.setDesiredBarcodeFormats(integrator.QR_CODE_TYPES);
         integrator.setPrompt("Place qr-code into the scanner area");
