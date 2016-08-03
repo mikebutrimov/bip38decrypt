@@ -1,6 +1,7 @@
 package org.unhack.bip38decrypt;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -42,12 +43,20 @@ public class MixedPagerAdapter extends FragmentPagerAdapter {
         return String.valueOf(mFragments.get(id).getTabId());
     }
 
-    public static void NavigateToTab(int tabId){
+    public void NavigateToTab(int tabId){
         Bundle data = new Bundle();
         Message msg = new Message();
         data.putInt(MainActivity.TABNUMBER, tabId);
         msg.setData(data);
         MainActivity.mSwipeHandler.sendMessage(msg);
+    }
+
+    public void CoolNavigateToTab(int tabId, String tabIdKey, Handler handlerToNotify){
+        Bundle data = new Bundle();
+        Message msg = new Message();
+        data.putInt(tabIdKey,tabId);
+        msg.setData(data);
+        handlerToNotify.sendMessage(msg);
     }
 
 }

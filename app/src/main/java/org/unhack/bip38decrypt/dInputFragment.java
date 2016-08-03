@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,15 @@ public class dInputFragment extends mFragment implements imFragment {
             @Override
             public void onClick(View v){
                 getActivity().finish();
+            }
+        });
+        button_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("decode","In add fragment");
+                dStateFragment stateFrg = new dStateFragment();
+                DecodeActivity.pagerAdapter.addFragment(stateFrg);
+                DecodeActivity.pagerAdapter.CoolNavigateToTab(DecodeActivity.pagerAdapter.getCount(),DecodeActivity.TABNUMBER,DecodeActivity.mSwipeHandler);
             }
         });
         button_scan.setOnClickListener(new View.OnClickListener() {

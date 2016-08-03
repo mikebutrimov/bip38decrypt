@@ -2,6 +2,7 @@ package org.unhack.bip38decrypt;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,14 +25,22 @@ import net.bither.bitherj.exception.AddressFormatException;
 
 public class DecodeActivity extends AppCompatActivity {
     public static MixedPagerAdapter pagerAdapter;
-    private ViewPager viewPager;
+    private NonSwipeableViewPager viewPager;
     private String wallet;
-    private boolean scan_fired = false;
+    public static Handler mSwipeHandler;
+    public static final String TABNUMBER = "tab_number";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
+
+        mSwipeHandler  = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                viewPager.setCurrentItem(msg.getData().getInt(TABNUMBER));
+            }
+        };
+
 
         List<mFragment> fragments = new ArrayList<mFragment>();
         dInputFragment inputFragment = new dInputFragment();
@@ -45,10 +54,15 @@ public class DecodeActivity extends AppCompatActivity {
         for (mFragment frg: fragments){
             pagerAdapter.addFragment(frg);
         }
-        viewPager = (ViewPager) findViewById(R.id.decode_container);
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.decode_container);
         if (viewPager != null) {
             viewPager.setAdapter(pagerAdapter);
+            viewPager.setPagingEnabled(false);
         }
+    }
+
+    public static void addFragment(mFragment frg){
+        pagerAdapter.addFragment(frg);
     }
 
 

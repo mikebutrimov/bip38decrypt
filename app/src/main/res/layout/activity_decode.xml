@@ -8,7 +8,7 @@
     tools:context="org.unhack.bip38decrypt.DecodeActivity">
 
 
-    <android.support.v4.view.ViewPager
+    <org.unhack.bip38decrypt.NonSwipeableViewPager
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/decode_container"

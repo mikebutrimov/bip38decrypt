@@ -49,7 +49,7 @@ public class QrFragment extends mFragment implements imFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MixedPagerAdapter.NavigateToTab(0);
+                MainActivity.pagerAdapter.NavigateToTab(0);
             }
         });
         return view;
