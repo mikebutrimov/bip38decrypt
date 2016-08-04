@@ -25,7 +25,8 @@
 
         <service
             android:name=".bip38service"
-            android:exported="false" />
+            android:exported="false"
+            android:process=":service"/>
 
         <activity
             android:name=".DecodeActivity"
