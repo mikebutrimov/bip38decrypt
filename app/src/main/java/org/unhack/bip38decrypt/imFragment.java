@@ -6,6 +6,8 @@ package org.unhack.bip38decrypt;
 public interface imFragment {
     void setId(int id);
     int getTabId();
+    void setUniqueName(String name);
+    String getUniqueName();
 }
 
 

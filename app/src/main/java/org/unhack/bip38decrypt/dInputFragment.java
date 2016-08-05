@@ -1,6 +1,5 @@
 package org.unhack.bip38decrypt;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
@@ -14,13 +13,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by unhack on 7/27/16.
  */
 public class dInputFragment extends mFragment implements imFragment {
-    public static Handler updateWallet;
+    public static Handler decodeInputFragmentUpdateWallet;
     private boolean fired = false;
     EditText edittext_wallet, edittext_passphrase;
     CheckBox checkbox_showcontent;
@@ -34,7 +32,7 @@ public class dInputFragment extends mFragment implements imFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.decode_step_uinput, container, false);
-        updateWallet = new Handler(){
+        decodeInputFragmentUpdateWallet = new Handler(){
             public void handleMessage(android.os.Message msg) {
                 try {
                     edittext_wallet.setText(msg.getData().getString("wallet"));
@@ -72,8 +70,8 @@ public class dInputFragment extends mFragment implements imFragment {
             public void onClick(View v) {
                 Log.d("decode","In add fragment");
                 dStateFragment stateFrg = new dStateFragment();
-                DecodeActivity.pagerAdapter.addFragment(stateFrg);
-                DecodeActivity.pagerAdapter.CoolNavigateToTab(DecodeActivity.pagerAdapter.getCount(),DecodeActivity.TABNUMBER,DecodeActivity.mSwipeHandler);
+                DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
+                DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
             }
         });
         button_scan.setOnClickListener(new View.OnClickListener() {

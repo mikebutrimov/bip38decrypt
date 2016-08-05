@@ -4,42 +4,50 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.bither.bitherj.crypto.bip38.Bip38;
-import net.bither.bitherj.crypto.bip38.Bip38.*;
 import net.bither.bitherj.exception.AddressFormatException;
 
 public class DecodeActivity extends AppCompatActivity {
-    public static MixedPagerAdapter pagerAdapter;
+    public static MixedPagerAdapter decodePagerAdapter;
     private NonSwipeableViewPager viewPager;
     private String wallet;
-    public static Handler mSwipeHandler;
+    public static Handler decodeSwipeHandler,decodeErrorHandler;
     public static final String TABNUMBER = "tab_number";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
-
-        mSwipeHandler  = new Handler() {
+        //This handler is used to swipe tabs
+        decodeSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 viewPager.setCurrentItem(msg.getData().getInt(TABNUMBER));
             }
         };
+        //this handler is used to react on different errors
+        decodeErrorHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                //crezate error fragment, put data into it, set focus to it
+                //we need to bypass error string and button callback
+                //oh fuck, i was looking to the wrong lifecycle scheme
+                Bundle args = msg.getData();
+                dErrorFragment errorFragment = new dErrorFragment();
+                errorFragment.setArguments(args);
+                decodePagerAdapter.addFragment(errorFragment);
+                Log.d("errHandler",String.valueOf(decodePagerAdapter.getCount()));
+                decodePagerAdapter.CoolNavigateToTab(1,TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+            }
+        };
+
 
 
         List<mFragment> fragments = new ArrayList<mFragment>();
@@ -50,20 +58,17 @@ public class DecodeActivity extends AppCompatActivity {
     }
 
     private void initPaging(List<mFragment> fragments) {
-        pagerAdapter = new MixedPagerAdapter(getSupportFragmentManager());
+        decodePagerAdapter = new MixedPagerAdapter(getSupportFragmentManager());
         for (mFragment frg: fragments){
-            pagerAdapter.addFragment(frg);
+            decodePagerAdapter.addFragment(frg);
         }
         viewPager = (NonSwipeableViewPager) findViewById(R.id.decode_container);
         if (viewPager != null) {
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setPagingEnabled(false);
+            viewPager.setAdapter(decodePagerAdapter);
+            //viewPager.setPagingEnabled(false);
         }
     }
 
-    public static void addFragment(mFragment frg){
-        pagerAdapter.addFragment(frg);
-    }
 
 
     @Override
@@ -80,7 +85,14 @@ public class DecodeActivity extends AppCompatActivity {
                             Bundle mBundle = new Bundle();
                             mBundle.putString("wallet",wallet);
                             msg.setData(mBundle);
-                            dInputFragment.updateWallet.sendMessage(msg);
+                            dInputFragment.decodeInputFragmentUpdateWallet.sendMessage(msg);
+                        }
+                        else {
+                            Message msg = new Message();
+                            Bundle mBundle = new Bundle();
+                            mBundle.putString("error",getString(R.string.notBipKey));
+                            msg.setData(mBundle);
+                            DecodeActivity.decodeErrorHandler.sendMessage(msg);
                         }
                     } catch (AddressFormatException e) {
                         e.printStackTrace();

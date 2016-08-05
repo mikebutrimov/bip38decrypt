@@ -1,6 +1,7 @@
 package org.unhack.bip38decrypt;
 
 import android.content.Context;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -33,6 +34,7 @@ public class NonSwipeableViewPager extends ViewPager {
 
         return false;
     }
+
 
     public void setPagingEnabled(boolean enabled) {
         this.enabled = enabled;

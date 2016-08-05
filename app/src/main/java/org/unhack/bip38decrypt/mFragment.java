@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
  */
 public class mFragment extends Fragment implements imFragment {
     private int id;
+    private String name;
     @Override
     public void setId(int id) {
         this.id = id;
@@ -16,5 +17,12 @@ public class mFragment extends Fragment implements imFragment {
         return this.id;
     }
 
+    public void setUniqueName(String name){
+        this.name = name;
+    }
+
+    public String getUniqueName(){
+        return this.name;
+    }
 
 }

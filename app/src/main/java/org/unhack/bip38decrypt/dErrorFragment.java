@@ -19,10 +19,13 @@ public class dErrorFragment extends mFragment implements imFragment {
         View view = inflater.inflate(R.layout.decode_step_error, container, false);
         textView_error = (TextView) view.findViewById(R.id.textView_error);
         button_oops = (Button) view.findViewById(R.id.button_oops);
-
+        button_oops.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DecodeActivity.decodePagerAdapter.CoolNavigateToTab(0,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,true);
+            }
+        });
         textView_error.setText(getArguments().getString("error"));
-
         return view;
-
     }
 }
