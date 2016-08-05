@@ -36,7 +36,7 @@ public class DecodeActivity extends AppCompatActivity {
         //this handler is used to react on different errors
         decodeErrorHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
-                //crezate error fragment, put data into it, set focus to it
+                //create error fragment, put data into it, set focus to it
                 //we need to bypass error string and button callback
                 //oh fuck, i was looking to the wrong lifecycle scheme
                 Bundle args = msg.getData();
@@ -65,7 +65,7 @@ public class DecodeActivity extends AppCompatActivity {
         viewPager = (NonSwipeableViewPager) findViewById(R.id.decode_container);
         if (viewPager != null) {
             viewPager.setAdapter(decodePagerAdapter);
-            //viewPager.setPagingEnabled(false);
+            viewPager.setPagingEnabled(false);
         }
     }
 
