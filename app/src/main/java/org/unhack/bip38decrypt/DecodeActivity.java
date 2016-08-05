@@ -47,9 +47,7 @@ public class DecodeActivity extends AppCompatActivity {
                 decodePagerAdapter.CoolNavigateToTab(1,TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
             }
         };
-
-
-
+        
         List<mFragment> fragments = new ArrayList<mFragment>();
         dInputFragment inputFragment = new dInputFragment();
         fragments.add(inputFragment);
@@ -68,8 +66,6 @@ public class DecodeActivity extends AppCompatActivity {
             viewPager.setPagingEnabled(false);
         }
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
