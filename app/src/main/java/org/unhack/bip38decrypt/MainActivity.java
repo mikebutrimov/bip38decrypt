@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,13 +60,14 @@ public class MainActivity extends AppCompatActivity {
         };
         mQrCreatreHandler = new Handler(){
             public void handleMessage(android.os.Message msg) {
-                Message msgCreationFragment = new Message();
+                Log.d("MainA QRH","Bojour EPTA");
+                /*Message msgCreationFragment = new Message();
                 msgCreationFragment.copyFrom(msg);
                 Bundle args = msg.getData();
-                StartCreationFragment.startCreationFragmentHandler.sendMessage(msgCreationFragment);
+                //StartCreationFragment.startCreationFragmentHandler.sendMessage(msgCreationFragment);
                 QrFragment mQrFragment = new QrFragment();
                 mQrFragment.setArguments(args);
-                pagerAdapter.addFragment(mQrFragment);
+                pagerAdapter.addFragment(mQrFragment);*/
             }
         };
         mErrorHandler = new Handler(){

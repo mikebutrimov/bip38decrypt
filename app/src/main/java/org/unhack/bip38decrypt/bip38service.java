@@ -21,12 +21,14 @@ public class bip38service extends IntentService {
     protected void onHandleIntent(Intent intent) {
         IAM = true;
         Bundle data = new Bundle();
-        data.putBoolean("working",true);
+        //data.putBoolean("working",true);
         Message msg = new Message();
-        msg.setData(data);
-        StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
+        //msg.setData(data);
+        //StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
         wallet = intent.getStringExtra("wallet");
+        Log.d("Service W",wallet);
         final String password = intent.getStringExtra("password");
+        Log.d("Service P",password);
         final String password2 = intent.getStringExtra("password2");
         final boolean needReEncrypt = intent.getBooleanExtra("reencrypt",false);
         SecureCharSequence result = null;
@@ -77,7 +79,10 @@ public class bip38service extends IntentService {
         msg.setData(data);
 
         if (res != null) {
+            Log.d("Service ", "Before Handler");
             MainActivity.mQrCreatreHandler.sendMessage(msg);
+            Log.d("Service ", "After Handler");
+
         }
         else {
             StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
