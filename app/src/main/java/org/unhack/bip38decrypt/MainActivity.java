@@ -1,8 +1,11 @@
 package org.unhack.bip38decrypt;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +31,9 @@ import net.bither.bitherj.core.In;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 736;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 136;
     public final static String WALLET_MESSAGE = "org.unhack.bip38decrypt.WALLET";
+    public static final String INTENT_FILTER = "org.unhack.bip38decrypt.BROADCAST_FILTER";
     public final static String WORKING_MODE = "org.unhack.bip38decrypt.WORKING_MODE";
     public final static String DECODE = "decode";
     public final static String REENDCODE = "reencode";
@@ -41,9 +46,31 @@ public class MainActivity extends AppCompatActivity {
     public static final String TABNUMBER = "tab_number";
     public AlertDialog.Builder mDialogBuilder;
     public AlertDialog mDialog;
+
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("In RECIEVE","Bonjour epta");
+            Log.d("MAIN F Rec",intent.getStringExtra("result"));
+            Message msgCreationFragment = new Message();
+            Bundle args = new Bundle();
+            args.putString("addr",intent.getStringExtra("address"));
+            args.putString("res",intent.getStringExtra("result"));
+            QrFragment mQrFragment = new QrFragment();
+            mQrFragment.setArguments(args);
+            pagerAdapter.addFragment(mQrFragment);
+            Intent dFinishIntent = new Intent(DecodeActivity.DECODE_INTENT_FILTER);
+            sendBroadcast(dFinishIntent);
+            pagerAdapter.NavigateToTab(pagerAdapter.getCount());
+        }
+    };
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(myReceiver,new IntentFilter(INTENT_FILTER));
         //check for camera permission
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.CAMERA)
@@ -59,10 +86,11 @@ public class MainActivity extends AppCompatActivity {
         };
         mQrCreatreHandler = new Handler(){
             public void handleMessage(android.os.Message msg) {
+                Log.d("MainA QRH","Bojour EPTA");
                 Message msgCreationFragment = new Message();
                 msgCreationFragment.copyFrom(msg);
                 Bundle args = msg.getData();
-                StartCreationFragment.startCreationFragmentHandler.sendMessage(msgCreationFragment);
+                //StartCreationFragment.startCreationFragmentHandler.sendMessage(msgCreationFragment);
                 QrFragment mQrFragment = new QrFragment();
                 mQrFragment.setArguments(args);
                 pagerAdapter.addFragment(mQrFragment);
@@ -81,9 +109,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
         setContentView(R.layout.activity_main);
         initPaging();
+
     }
+
 
 
     @Override
@@ -139,6 +170,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();;
+        registerReceiver(myReceiver,new IntentFilter(INTENT_FILTER));
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        unregisterReceiver(myReceiver);
     }
 
 }

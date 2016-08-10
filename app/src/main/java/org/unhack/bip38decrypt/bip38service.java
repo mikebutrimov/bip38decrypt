@@ -20,13 +20,10 @@ public class bip38service extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         IAM = true;
-        Bundle data = new Bundle();
-        data.putBoolean("working",true);
-        Message msg = new Message();
-        msg.setData(data);
-        StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
-        wallet = intent.getStringExtra("wallet");
+           wallet = intent.getStringExtra("wallet");
+        Log.d("Service W",wallet);
         final String password = intent.getStringExtra("password");
+        Log.d("Service P",password);
         final String password2 = intent.getStringExtra("password2");
         final boolean needReEncrypt = intent.getBooleanExtra("reencrypt",false);
         SecureCharSequence result = null;
@@ -37,29 +34,17 @@ public class bip38service extends IntentService {
             ECKey ecKey = dumpedPrivateKey.getKey();
             address = ecKey.toAddress();
             Log.d("Service addr",address);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (AddressFormatException e) {
-            Bundle errData = new Bundle();
-            errData.putString("error","Wrong address");
-            Message errMsg = new Message();
-            errMsg.setData(errData);
-            MainActivity.mErrorHandler.sendMessage(errMsg);
             e.printStackTrace();
         } catch (NullPointerException e){
-            Bundle errData = new Bundle();
-            errData.putString("error","Wrong password / decryption failure");
-            Message errMsg = new Message();
-            errMsg.setData(errData);
-            MainActivity.mErrorHandler.sendMessage(errMsg);
-        }
 
+        }
         if (result != null) {
             res = result.toString();
             Log.d("Service res",res);
         }
-
         if (needReEncrypt){
             try {
                 res = Bip38.encryptNoEcMultiply(password2,res);
@@ -70,17 +55,20 @@ public class bip38service extends IntentService {
                 e.printStackTrace();
             }
         }
-        msg = new Message();
-        data.putBoolean("working", false);
-        data.putString("addr", address);
-        data.putString("res", res);
-        msg.setData(data);
+
 
         if (res != null) {
-            MainActivity.mQrCreatreHandler.sendMessage(msg);
+            Log.d("Service ", "Before Handler");
+
+            Intent resIntent = new Intent(MainActivity.INTENT_FILTER);
+            resIntent.putExtra("result",res);
+            resIntent.putExtra("address",address);
+            sendBroadcast(resIntent);
+            Log.d("Service ", "After Handler");
+
+
         }
         else {
-            StartCreationFragment.startCreationFragmentHandler.sendMessage(msg);
         }
         IAM = false;
     }

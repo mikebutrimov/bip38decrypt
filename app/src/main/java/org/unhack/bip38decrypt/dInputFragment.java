@@ -1,5 +1,6 @@
 package org.unhack.bip38decrypt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
@@ -69,6 +70,10 @@ public class dInputFragment extends mFragment implements imFragment {
             @Override
             public void onClick(View v) {
                 Log.d("decode","In add fragment");
+                Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
+                bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
+                bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
+                getContext().startService(bip38ServiceIntent);
                 dStateFragment stateFrg = new dStateFragment();
                 DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
                 DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
