@@ -28,7 +28,7 @@ import net.bither.bitherj.core.In;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 736;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 136;
     public final static String WALLET_MESSAGE = "org.unhack.bip38decrypt.WALLET";
     public final static String WORKING_MODE = "org.unhack.bip38decrypt.WORKING_MODE";
     public final static String DECODE = "decode";
@@ -141,6 +141,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
 }

@@ -72,15 +72,19 @@ public class bip38service extends IntentService {
                 e.printStackTrace();
             }
         }
-        msg = new Message();
+        Message ololo = new Message();
         data.putBoolean("working", false);
         data.putString("addr", address);
         data.putString("res", res);
-        msg.setData(data);
+        ololo.setData(data);
+
+        Log.d("Service H",MainActivity.mQrCreatreHandler.toString());
 
         if (res != null) {
             Log.d("Service ", "Before Handler");
-            MainActivity.mQrCreatreHandler.sendMessage(msg);
+            if (ololo != null) {
+                MainActivity.mQrCreatreHandler.sendMessage(ololo);
+            }
             Log.d("Service ", "After Handler");
 
         }
