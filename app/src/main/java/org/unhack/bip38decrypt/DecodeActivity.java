@@ -1,6 +1,9 @@
 package org.unhack.bip38decrypt;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,11 +25,19 @@ public class DecodeActivity extends AppCompatActivity {
     private String wallet;
     public static Handler decodeSwipeHandler,decodeErrorHandler;
     public static final String TABNUMBER = "tab_number";
+    public static final String DECODE_INTENT_FILTER = "DECODEFINISH";
 
+    private BroadcastReceiver mFinishReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
+        registerReceiver(mFinishReciever,new IntentFilter(this.DECODE_INTENT_FILTER));
         //This handler is used to swipe tabs
         decodeSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -99,6 +110,12 @@ public class DecodeActivity extends AppCompatActivity {
                 //okay :(
             }
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(mFinishReciever);
     }
 
 
