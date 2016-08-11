@@ -17,8 +17,6 @@
 package net.bither.bitherj.crypto.bip38;
 
 
-import com.lambdaworks.crypto.SCrypt;
-
 import net.bither.bitherj.crypto.DumpedPrivateKey;
 import net.bither.bitherj.crypto.ECKey;
 import net.bither.bitherj.crypto.SecureCharSequence;
@@ -32,6 +30,9 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+
+
+
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -76,10 +77,11 @@ public class Bip38 {
         byte[] derived;
         try {
             passwordBytes = convertToByteArray(passphrase);
-            derived = SCrypt.scrypt(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize
-            );
+            //derived = SCrypt.scrypt(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
+            //derived = org.spongycastle.crypto.generators.SCrypt.generate(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
+            derived = SCrypt.generate(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
             return derived;
-        } catch (GeneralSecurityException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
             // Zero the password bytes.
@@ -275,6 +277,10 @@ public class Bip38 {
 
     public static SecureCharSequence decryptEcMultiply(Bip38PrivateKey bip38Key, CharSequence passphrase
     ) throws InterruptedException, AddressFormatException {
+        //
+
+        //
+
         // Get 8 byte Owner Salt
         byte[] ownerEntropy = new byte[8];
         System.arraycopy(bip38Key.data, 0, ownerEntropy, 0, 8);
@@ -315,11 +321,16 @@ public class Bip38 {
         System.arraycopy(bip38Key.salt, 0, saltPlusOwnerSalt, 0, 4);
         System.arraycopy(ownerEntropy, 0, saltPlusOwnerSalt, 4, 8);
         byte[] derived;
-        try {
+        //derived = org.spongycastle.crypto.generators.SCrypt.generate(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
+        derived = SCrypt.generate(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
+        /*try {
             derived = SCrypt.scrypt(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
+
+
+        //derived =
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         byte[] derivedQuater1 = new byte[16];
         System.arraycopy(derived, 0, derivedQuater1, 0, 16);
         byte[] derivedQuater2 = new byte[16];
