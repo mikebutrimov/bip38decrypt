@@ -15,6 +15,10 @@ import android.widget.ImageButton;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import net.bither.bitherj.crypto.bip38.Bip38;
+import net.bither.bitherj.crypto.bip38.Bip38Util;
+import net.bither.bitherj.exception.AddressFormatException;
+
 /**
  * Created by unhack on 7/27/16.
  */
@@ -71,12 +75,26 @@ public class dInputFragment extends mFragment implements imFragment {
             public void onClick(View v) {
                 Log.d("decode","In add fragment");
                 Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
-                bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
-                bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
-                getContext().startService(bip38ServiceIntent);
-                dStateFragment stateFrg = new dStateFragment();
-                DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
-                DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+                try {
+                    if (Bip38.isBip38PrivateKey(edittext_wallet.getText().toString())){
+                        Log.d("InputFRG","Wrong key");
+                        bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
+                        bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
+                        getContext().startService(bip38ServiceIntent);
+                        dStateFragment stateFrg = new dStateFragment();
+                        DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
+                        DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+                    }
+                    else {
+                        Bundle mBundle = new Bundle();
+                        mBundle.putString("error",getString(R.string.notBipKey));
+                        Intent decodeErrorIntent = new Intent(DecodeActivity.DECODE_INTENT_ERROR);
+                        decodeErrorIntent.putExtra("args",mBundle);
+                        getActivity().sendBroadcast(decodeErrorIntent);
+                    }
+                } catch (AddressFormatException e) {
+                    e.printStackTrace();
+                }
             }
         });
         button_scan.setOnClickListener(new View.OnClickListener() {

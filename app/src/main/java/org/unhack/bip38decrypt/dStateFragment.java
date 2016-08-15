@@ -32,18 +32,16 @@ public class dStateFragment extends mFragment implements imFragment {
             }
         };
 
-
-
         View view = inflater.inflate(R.layout.decode_step_progress, container, false);
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         button_cancel = (Button) view.findViewById(R.id.button_cancel);
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent stopService = new Intent(bip38service.BIP38_SERVICE_INTENT_FILTER);
-                Log.d("StateF","Sending broadcast");
-                getActivity().getApplication().sendBroadcast(stopService);
                 bip38service.getWorker().interrupt();
+                if (bip38service.getWorker().isInterrupted()){
+                    Log.d("DestroyActivity","thread was interrupted");
+                }
                 DecodeActivity.decodePagerAdapter.CoolNavigateToTab(0,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,true);
             }
         });

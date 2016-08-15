@@ -26,6 +26,7 @@ public class DecodeActivity extends AppCompatActivity {
     public static Handler decodeSwipeHandler,decodeErrorHandler;
     public static final String TABNUMBER = "tab_number";
     public static final String DECODE_INTENT_FILTER = "DECODEFINISH";
+    public static final String DECODE_INTENT_ERROR = "DECODEERROR";
 
     private BroadcastReceiver mFinishReciever = new BroadcastReceiver() {
         @Override
@@ -33,11 +34,26 @@ public class DecodeActivity extends AppCompatActivity {
             finish();
         }
     };
+
+    private BroadcastReceiver mErrorReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle args = intent.getBundleExtra("args");
+            dErrorFragment errorFragment = new dErrorFragment();
+            errorFragment.setArguments(args);
+            decodePagerAdapter.addFragment(errorFragment);
+            Log.d("errHandler",String.valueOf(decodePagerAdapter.getCount()));
+            decodePagerAdapter.CoolNavigateToTab(decodePagerAdapter.getCount(),TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
         registerReceiver(mFinishReciever,new IntentFilter(this.DECODE_INTENT_FILTER));
+        registerReceiver(mErrorReciever,new IntentFilter(this.DECODE_INTENT_ERROR));
         //This handler is used to swipe tabs
         decodeSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -116,6 +132,7 @@ public class DecodeActivity extends AppCompatActivity {
     public void onDestroy(){
         super.onDestroy();
         unregisterReceiver(mFinishReciever);
+        unregisterReceiver(mErrorReciever);
     }
 
 

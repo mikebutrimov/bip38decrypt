@@ -15,6 +15,7 @@
     <string name="edittext_passphrase">Passphrase</string>
     <string name="textview_decoding">Decoding</string>
     <string name="notBipKey">Sorry. It\'s not BIP38 wallet</string>
+    <string name="wrongPassword">Sorry, wrong password</string>
 
     <string name="button_next">Next</string>
     <string name="button_back">Back</string>
