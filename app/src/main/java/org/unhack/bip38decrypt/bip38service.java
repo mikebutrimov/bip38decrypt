@@ -1,6 +1,9 @@
 package org.unhack.bip38decrypt;
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -12,15 +15,36 @@ import net.bither.bitherj.exception.AddressFormatException;
 
 
 public class bip38service extends IntentService {
+    public static final String BIP38_SERVICE_INTENT_FILTER = "BIP38STOPSERVICE";
     private String res,wallet,address;
     public static  boolean IAM = false;
+    public static Thread worker;
+
+    private BroadcastReceiver mThreadHaltReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("BIP38S","Reciever Stop service");
+            getWorker().interrupt();
+            Log.d("BIP38S","Reciever some service's .interrupt was called");
+        }
+    };
+
     public bip38service() {
         super("bip38service");
     }
+
+    @Override
+    public void onCreate(){
+        super.onCreate();
+
+        this.registerReceiver(mThreadHaltReciever, new IntentFilter(this.BIP38_SERVICE_INTENT_FILTER));
+    }
+
     @Override
     protected void onHandleIntent(Intent intent) {
+
         IAM = true;
-           wallet = intent.getStringExtra("wallet");
+        wallet = intent.getStringExtra("wallet");
         Log.d("Service W",wallet);
         final String password = intent.getStringExtra("password");
         Log.d("Service P",password);
@@ -28,9 +52,10 @@ public class bip38service extends IntentService {
         final boolean needReEncrypt = intent.getBooleanExtra("reencrypt",false);
 
 
+
         try {
 
-            Thread worker = new Thread(new Runnable() {
+            worker = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -46,6 +71,8 @@ public class bip38service extends IntentService {
                         e.printStackTrace();
                     } catch (AddressFormatException e) {
                         e.printStackTrace();
+                    } catch (RuntimeException e){
+                        e.printStackTrace();
                     }
 
                     if (res != null) {
@@ -58,6 +85,7 @@ public class bip38service extends IntentService {
                     }
                     IAM = false;
                 }
+
             });
             worker.setPriority(Thread.MAX_PRIORITY);
             worker.start();
@@ -66,4 +94,15 @@ public class bip38service extends IntentService {
             e.printStackTrace();
         }
     }
+
+    public static Thread getWorker(){
+        return worker;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(mThreadHaltReciever);
+    }
+
 }

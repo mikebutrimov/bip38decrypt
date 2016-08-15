@@ -1,7 +1,9 @@
 package org.unhack.bip38decrypt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +40,10 @@ public class dStateFragment extends mFragment implements imFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent stopService = new Intent(bip38service.BIP38_SERVICE_INTENT_FILTER);
+                Log.d("StateF","Sending broadcast");
+                getActivity().getApplication().sendBroadcast(stopService);
+                bip38service.getWorker().interrupt();
                 DecodeActivity.decodePagerAdapter.CoolNavigateToTab(0,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,true);
             }
         });
