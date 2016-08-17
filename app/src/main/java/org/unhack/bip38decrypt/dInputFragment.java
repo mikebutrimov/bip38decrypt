@@ -13,10 +13,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.common.util.concurrent.ExecutionError;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.bither.bitherj.crypto.bip38.Bip38;
-import net.bither.bitherj.crypto.bip38.Bip38Util;
 import net.bither.bitherj.exception.AddressFormatException;
 
 /**
@@ -24,8 +24,9 @@ import net.bither.bitherj.exception.AddressFormatException;
  */
 public class dInputFragment extends mFragment implements imFragment {
     public static Handler decodeInputFragmentUpdateWallet;
+    private boolean reencrypt = false;
     private boolean fired = false;
-    EditText edittext_wallet, edittext_passphrase;
+    EditText edittext_wallet, edittext_passphrase, editText_newpassphrase;
     CheckBox checkbox_showcontent;
     Button button_back, button_next;
     ImageButton button_scan;
@@ -33,10 +34,25 @@ public class dInputFragment extends mFragment implements imFragment {
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.decode_step_uinput, container, false);
+        View view;
+        mBundle = this.getArguments();
+        try{
+            reencrypt = mBundle.getBoolean("reencrypt", false);
+        }
+        catch (Exception e){
+            reencrypt = false;
+        }
+
+        if (reencrypt) {
+            view = inflater.inflate(R.layout.decode_step_uinput_re, container, false);
+            editText_newpassphrase = (EditText) view.findViewById(R.id.editText_newpassphrase);
+        } else {
+            view = inflater.inflate(R.layout.decode_step_uinput_nore, container, false);
+        }
         decodeInputFragmentUpdateWallet = new Handler(){
             public void handleMessage(android.os.Message msg) {
                 try {
@@ -48,7 +64,6 @@ public class dInputFragment extends mFragment implements imFragment {
             }
         };
         //init local vars and view elements
-        mBundle = this.getArguments();
         edittext_wallet = (EditText) view.findViewById(R.id.editText_wallet);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_passphrase);
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_showcontent);
@@ -80,6 +95,13 @@ public class dInputFragment extends mFragment implements imFragment {
                         Log.d("InputFRG","Wrong key");
                         bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
                         bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
+                        bip38ServiceIntent.putExtra("reencrypt",reencrypt);
+                        try{
+                            bip38ServiceIntent.putExtra("password2",editText_newpassphrase.getText().toString());
+                        }
+                        catch (Exception e){
+
+                        }
                         getContext().startService(bip38ServiceIntent);
                         dStateFragment stateFrg = new dStateFragment();
                         DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
@@ -120,9 +142,21 @@ public class dInputFragment extends mFragment implements imFragment {
     private void showContent(View v){
         if (checkbox_showcontent.isChecked()){
             edittext_passphrase.setTransformationMethod(null);
+            try {
+                editText_newpassphrase.setTransformationMethod(null);
+            }
+            catch (Exception e){
+
+            }
         }
         else {
             edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
+            try {
+                editText_newpassphrase.setTransformationMethod(new PasswordTransformationMethod());
+            }
+            catch (Exception e){
+
+            }
         }
     }
 

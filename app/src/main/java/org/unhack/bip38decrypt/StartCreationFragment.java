@@ -60,6 +60,7 @@ public class StartCreationFragment extends mFragment implements imFragment {
             public void onClick(View v) {
                 Intent decode_activity_intent = new Intent(getContext(), DecodeActivity.class);
                 decode_activity_intent.putExtra(MainActivity.WORKING_MODE,MainActivity.REENDCODE);
+                decode_activity_intent.putExtra("reencrypt",true);
                 startActivity(decode_activity_intent);
             }
         });

@@ -50,6 +50,9 @@ public class bip38service extends IntentService {
                         address = ecKey.toAddress();
                         Log.d("Service addr", address);
                         if (needReEncrypt) {
+                            Intent setStateIntent = new Intent(DecodeActivity.DECODE_STATE_FILTER);
+                            setStateIntent.putExtra("state",getString(R.string.state_encoding));
+                            sendBroadcast(setStateIntent);
                             res = Bip38.encryptNoEcMultiply(password2, res);
                         }
 

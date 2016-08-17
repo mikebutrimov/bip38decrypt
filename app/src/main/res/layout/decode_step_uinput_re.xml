@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
+        android:text="@string/button_back"
+        android:id="@+id/button_back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+        android:text="@string/button_next"
+        android:id="@+id/button_next"
+        android:layout_alignTop="@+id/button_back"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button_back"
+        android:id="@+id/linearLayout"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/edittext_encoded"
+            android:id="@+id/textView" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin">
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_wallet"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+            <ImageButton
+                android:id="@+id/button_scan"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:src="@android:drawable/ic_menu_camera"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/editText_wallet"
+                android:layout_alignBottom="@+id/editText_wallet"
+                android:layout_alignRight="@+id/editText_wallet"
+                android:layout_alignEnd="@+id/editText_wallet"/>
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/edittext_passphrase"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText_passphrase"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="New passphrase"
+            android:id="@+id/textView3" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editText_newpassphrase"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:id="@+id/checkBox_showcontent"
+            android:checked="false"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/checkBoxShowPassword"
+            android:id="@+id/textView_chckbox" />
+
+    </LinearLayout>
+
+</RelativeLayout>

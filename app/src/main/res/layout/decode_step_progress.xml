@@ -10,8 +10,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView_decoding"
         android:layout_weight="0.2"
-        android:text="@string/textview_decoding"
-        android:autoText="false"
+        android:text="@string/state_decoding"
         android:gravity="center|center_horizontal" />
 
     <ProgressBar

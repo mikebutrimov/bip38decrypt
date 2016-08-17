@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -27,6 +28,7 @@ public class DecodeActivity extends AppCompatActivity {
     public static final String TABNUMBER = "tab_number";
     public static final String DECODE_INTENT_FILTER = "DECODEFINISH";
     public static final String DECODE_INTENT_ERROR = "DECODEERROR";
+    public static final String DECODE_STATE_FILTER = "STATE";
 
     private BroadcastReceiver mFinishReciever = new BroadcastReceiver() {
         @Override
@@ -47,6 +49,26 @@ public class DecodeActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver mStateReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("State Reciever","HALO !!!!!");
+            String state;
+            try {
+                state = intent.getStringExtra("state");
+            }
+            catch (Exception e){
+                state = getString(R.string.state_decoding);
+            }
+            Log.d("STATE R",state);
+            Bundle args = new Bundle();
+            args.putBoolean("isWorking",true);
+            args.putString("state",state);
+            Message msg = new Message();
+            msg.setData(args);
+            dStateFragment.onWorkHandler.sendMessage(msg);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +76,7 @@ public class DecodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_decode);
         registerReceiver(mFinishReciever,new IntentFilter(this.DECODE_INTENT_FILTER));
         registerReceiver(mErrorReciever,new IntentFilter(this.DECODE_INTENT_ERROR));
+        registerReceiver(mStateReciever,new IntentFilter(this.DECODE_STATE_FILTER));
         //This handler is used to swipe tabs
         decodeSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -77,6 +100,12 @@ public class DecodeActivity extends AppCompatActivity {
 
         List<mFragment> fragments = new ArrayList<mFragment>();
         dInputFragment inputFragment = new dInputFragment();
+        if (getIntent().getBooleanExtra("reencrypt",false)){
+            Bundle args = new Bundle();
+            args.putBoolean("reencrypt",true);
+            inputFragment.setArguments(args);
+        }
+
         fragments.add(inputFragment);
         initPaging(fragments);
 
@@ -133,6 +162,7 @@ public class DecodeActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(mFinishReciever);
         unregisterReceiver(mErrorReciever);
+        unregisterReceiver(mStateReciever);
     }
 
 

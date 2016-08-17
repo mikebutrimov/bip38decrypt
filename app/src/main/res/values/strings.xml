@@ -13,7 +13,8 @@
     <string name="title_activity_decode">DecodeActivity</string>
     <string name="edittext_encoded">Encoded</string>
     <string name="edittext_passphrase">Passphrase</string>
-    <string name="textview_decoding">Decoding</string>
+    <string name="state_decoding">Decoding</string>
+    <string name="state_encoding">Encoding</string>
     <string name="notBipKey">Sorry. It\'s not BIP38 wallet</string>
     <string name="wrongPassword">Sorry, wrong password</string>
 
