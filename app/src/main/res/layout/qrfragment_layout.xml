@@ -38,8 +38,8 @@
         <org.unhack.bip38decrypt.VerticalTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/view"
-            android:text="QWERTYQWERTYQWERTY"
+            android:id="@+id/view_address"
+
             android:gravity="bottom|center"
             android:layout_weight="0.1"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -55,9 +55,9 @@
         <org.unhack.bip38decrypt.VerticalTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="QWERTYQWERTYQWERTY"
+
             android:gravity="bottom|center"
-            android:id="@+id/view2"
+            android:id="@+id/view_privatekey"
             android:layout_weight="0.1"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             />
