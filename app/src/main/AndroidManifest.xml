@@ -43,5 +43,7 @@
             tools:replace="screenOrientation"
             android:parentActivityName=".DecodeActivity"
             />
+
+        <activity android:name=".AboutActivity"></activity>
     </application>
 </manifest>

@@ -47,6 +47,8 @@ public class StartCreationFragment extends mFragment implements imFragment {
         View view = inflater.inflate(R.layout.creationfragment_layout, container, false);
         TextView tv_decode = (TextView) view.findViewById(R.id.textView_decode);
         TextView tv_reencode = (TextView) view.findViewById(R.id.textView2_reencode);
+        TextView tv_create =  (TextView) view.findViewById(R.id.textView3_create);
+
         tv_decode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +66,13 @@ public class StartCreationFragment extends mFragment implements imFragment {
                 startActivity(decode_activity_intent);
             }
         });
+        tv_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(),getString(R.string.notimplemented),Toast.LENGTH_LONG).show();
+            }
+        });
+
         mView = view;
         return view;
     }
