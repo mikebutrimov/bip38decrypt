@@ -15,10 +15,10 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:2.0.1@jar'
     compile 'com.lambdaworks:scrypt:1.4.0@jar'
     compile 'org.slf4j:slf4j-api:1.7.7'
-    compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile 'org.apache.httpcomponents:httpclient:4.3.5@jar'
     compile 'org.apache.httpcomponents:httpmime:4.1@jar'
     compile 'org.apache.httpcomponents:httpcore:4.3.2@jar'
+    compile 'com.madgag.spongycastle:core:1.54.0.0'
     testCompile 'junit:junit:4.11'
     testCompile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'org.json:json:20140107@jar'
