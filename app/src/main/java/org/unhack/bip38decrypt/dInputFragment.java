@@ -13,15 +13,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.common.util.concurrent.ExecutionError;
 import com.google.zxing.integration.android.IntentIntegrator;
+
+import net.bither.bitherj.crypto.bip38.Bip38;
+import net.bither.bitherj.exception.AddressFormatException;
 
 /**
  * Created by unhack on 7/27/16.
  */
 public class dInputFragment extends mFragment implements imFragment {
     public static Handler decodeInputFragmentUpdateWallet;
+    private boolean reencrypt = false;
     private boolean fired = false;
-    EditText edittext_wallet, edittext_passphrase;
+    EditText edittext_wallet, edittext_passphrase, editText_newpassphrase;
     CheckBox checkbox_showcontent;
     Button button_back, button_next;
     ImageButton button_scan;
@@ -29,10 +34,25 @@ public class dInputFragment extends mFragment implements imFragment {
 
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.decode_step_uinput, container, false);
+        View view;
+        mBundle = this.getArguments();
+        try{
+            reencrypt = mBundle.getBoolean("reencrypt", false);
+        }
+        catch (Exception e){
+            reencrypt = false;
+        }
+
+        if (reencrypt) {
+            view = inflater.inflate(R.layout.decode_step_uinput_re, container, false);
+            editText_newpassphrase = (EditText) view.findViewById(R.id.editText_newpassphrase);
+        } else {
+            view = inflater.inflate(R.layout.decode_step_uinput_nore, container, false);
+        }
         decodeInputFragmentUpdateWallet = new Handler(){
             public void handleMessage(android.os.Message msg) {
                 try {
@@ -44,7 +64,6 @@ public class dInputFragment extends mFragment implements imFragment {
             }
         };
         //init local vars and view elements
-        mBundle = this.getArguments();
         edittext_wallet = (EditText) view.findViewById(R.id.editText_wallet);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_passphrase);
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_showcontent);
@@ -71,12 +90,33 @@ public class dInputFragment extends mFragment implements imFragment {
             public void onClick(View v) {
                 Log.d("decode","In add fragment");
                 Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
-                bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
-                bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
-                getContext().startService(bip38ServiceIntent);
-                dStateFragment stateFrg = new dStateFragment();
-                DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
-                DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+                try {
+                    if (Bip38.isBip38PrivateKey(edittext_wallet.getText().toString())){
+                        Log.d("InputFRG","Wrong key");
+                        bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
+                        bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
+                        bip38ServiceIntent.putExtra("reencrypt",reencrypt);
+                        try{
+                            bip38ServiceIntent.putExtra("password2",editText_newpassphrase.getText().toString());
+                        }
+                        catch (Exception e){
+
+                        }
+                        getContext().startService(bip38ServiceIntent);
+                        dStateFragment stateFrg = new dStateFragment();
+                        DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
+                        DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+                    }
+                    else {
+                        Bundle mBundle = new Bundle();
+                        mBundle.putString("error",getString(R.string.notBipKey));
+                        Intent decodeErrorIntent = new Intent(DecodeActivity.DECODE_INTENT_ERROR);
+                        decodeErrorIntent.putExtra("args",mBundle);
+                        getActivity().sendBroadcast(decodeErrorIntent);
+                    }
+                } catch (AddressFormatException e) {
+                    e.printStackTrace();
+                }
             }
         });
         button_scan.setOnClickListener(new View.OnClickListener() {
@@ -102,9 +142,21 @@ public class dInputFragment extends mFragment implements imFragment {
     private void showContent(View v){
         if (checkbox_showcontent.isChecked()){
             edittext_passphrase.setTransformationMethod(null);
+            try {
+                editText_newpassphrase.setTransformationMethod(null);
+            }
+            catch (Exception e){
+
+            }
         }
         else {
             edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
+            try {
+                editText_newpassphrase.setTransformationMethod(new PasswordTransformationMethod());
+            }
+            catch (Exception e){
+
+            }
         }
     }
 

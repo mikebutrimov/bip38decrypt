@@ -11,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by unhack on 6/23/16.
@@ -23,7 +26,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 public class QrFragment extends mFragment implements imFragment {
     private String addr,wallet;
     private Bitmap qrbitmap;
-
+    private TextView address, key;
 
 
     @Override
@@ -31,13 +34,18 @@ public class QrFragment extends mFragment implements imFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.qrfragment_layout, container, false);
         ImageView qrView = (ImageView) view.findViewById(R.id.imageView);
+        address = (TextView) view.findViewById(R.id.view_address);
+        key = (TextView) view.findViewById(R.id.view_privatekey);
         Bundle mBundle =  this.getArguments();
         try {
             this.addr = mBundle.getString("addr");
             this.wallet = mBundle.getString("res");
+            address.setText(this.addr);
+            key.setText(this.wallet);
             qrbitmap = getQr(this.wallet);
             Drawable qrD = new BitmapDrawable(this.qrbitmap);
             qrView.setImageDrawable(qrD);
+
         }
         catch (Exception e){
             //todo handle exception

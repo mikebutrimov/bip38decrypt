@@ -26,15 +26,44 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/fab_add"
-        android:layout_alignEnd="@+id/fab_add"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/fab_del" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/fab_del"
+        android:weightSum="10">
+
+        <org.unhack.bip38decrypt.VerticalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/view_address"
+
+            android:gravity="bottom|center"
+            android:layout_weight="0.1"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:layout_gravity="center"
+            android:layout_weight="9"/>
+
+        <org.unhack.bip38decrypt.VerticalTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:gravity="bottom|center"
+            android:id="@+id/view_privatekey"
+            android:layout_weight="0.1"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            />
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>
