@@ -1,34 +1,20 @@
 package org.unhack.bip38decrypt;
 import android.app.IntentService;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Message;
 import android.util.Log;
-
-import net.bither.bitherj.core.In;
 import net.bither.bitherj.crypto.DumpedPrivateKey;
 import net.bither.bitherj.crypto.ECKey;
-import net.bither.bitherj.crypto.SecureCharSequence;
 import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
-import net.bither.bitherj.exception.PasswordException;
-
 
 public class bip38service extends IntentService {
-
     private String res,wallet,address;
     public static  boolean IAM = false;
     public static Thread worker;
-
-
     public bip38service() {
         super("bip38service");
     }
-
-
 
     @Override
     protected void onHandleIntent(final Intent intent) {
@@ -47,7 +33,16 @@ public class bip38service extends IntentService {
                         res = Bip38.decrypt(wallet, password).toString();
                         DumpedPrivateKey dumpedPrivateKey = new DumpedPrivateKey(res);
                         ECKey ecKey = dumpedPrivateKey.getKey();
+                        Log.d("ecKEY",ecKey.toStringWithPrivate());
                         address = ecKey.toAddress();
+                        byte[] privKey = ecKey.getPrivKeyBytes();
+                        //convert priv key to uncompressed format
+                        try{
+                            res = Utils.encodePrivateKeyToWIF(privKey);
+                        }
+                        catch (Exception e){
+                            e.printStackTrace();
+                        }
                         Log.d("Service addr", address);
                         if (needReEncrypt) {
                             Intent setStateIntent = new Intent(DecodeActivity.DECODE_STATE_FILTER);
@@ -55,8 +50,6 @@ public class bip38service extends IntentService {
                             sendBroadcast(setStateIntent);
                             res = Bip38.encryptNoEcMultiply(password2, res);
                         }
-
-
 
                     } catch (NullPointerException e){
                         //probably wrong password / input
@@ -68,18 +61,15 @@ public class bip38service extends IntentService {
                         decodeErrorIntent.putExtra("args",mBundle);
                         sendBroadcast(decodeErrorIntent);
                         e.printStackTrace();
-
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     } catch (AddressFormatException e) {
                         e.printStackTrace();
-
                     }catch (RuntimeException e) {
                         //it's ok
                         //it will happen on thread.interrupt()
                         e.printStackTrace();
                     }
-
 
                     if (res != null) {
                         Log.d("Service ", "Before Handler");
@@ -91,18 +81,14 @@ public class bip38service extends IntentService {
                     }
                     IAM = false;
                 }
-
             });
             worker.setPriority(Thread.MAX_PRIORITY);
             worker.start();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public static Thread getWorker(){
         return worker;
     }
-
 }

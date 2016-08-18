@@ -98,6 +98,7 @@ public class ECKey implements Serializable {
      */
     public static final BigInteger HALF_CURVE_ORDER;
 
+
     private static final long serialVersionUID = -728224901792295832L;
 
     static {
