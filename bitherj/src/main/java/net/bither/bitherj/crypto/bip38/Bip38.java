@@ -77,8 +77,6 @@ public class Bip38 {
         byte[] derived;
         try {
             passwordBytes = convertToByteArray(passphrase);
-            //derived = SCrypt.scrypt(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
-            //derived = org.spongycastle.crypto.generators.SCrypt.generate(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
             derived = SCrypt.generate(convertToByteArray(passphrase), salt, SCRYPT_N, SCRYPT_R, SCRYPT_P, outputSize);
             return derived;
         } catch (Exception e) {
@@ -321,16 +319,8 @@ public class Bip38 {
         System.arraycopy(bip38Key.salt, 0, saltPlusOwnerSalt, 0, 4);
         System.arraycopy(ownerEntropy, 0, saltPlusOwnerSalt, 4, 8);
         byte[] derived;
-        //derived = org.spongycastle.crypto.generators.SCrypt.generate(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
         derived = SCrypt.generate(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
-        /*try {
-            derived = SCrypt.scrypt(passPoint, saltPlusOwnerSalt, 1024, 1, 1, 64);
 
-
-        //derived =
-        } catch (GeneralSecurityException e) {
-            throw new RuntimeException(e);
-        }*/
         byte[] derivedQuater1 = new byte[16];
         System.arraycopy(derived, 0, derivedQuater1, 0, 16);
         byte[] derivedQuater2 = new byte[16];
