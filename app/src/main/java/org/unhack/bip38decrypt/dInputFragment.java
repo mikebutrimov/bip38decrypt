@@ -139,6 +139,13 @@ public class dInputFragment extends mFragment implements imFragment {
         return view;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        //check for show content
+        showContent(getView());
+    }
+
     private void showContent(View v){
         if (checkbox_showcontent.isChecked()){
             edittext_passphrase.setTransformationMethod(null);

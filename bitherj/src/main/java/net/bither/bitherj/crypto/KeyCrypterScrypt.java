@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 package net.bither.bitherj.crypto;
+import net.bither.bitherj.crypto.bip38.SCrypt;
 
-import com.lambdaworks.crypto.SCrypt;
 
 import net.bither.bitherj.utils.Utils;
 
@@ -102,7 +102,7 @@ public class KeyCrypterScrypt implements KeyCrypter, Serializable {
                 log.warn("You are using a ScryptParameters with no salt. Your encryption may be vulnerable to a dictionary attack.");
             }
 
-            byte[] keyBytes = SCrypt.scrypt(passwordBytes, salt, BITCOINJ_SCRYPT_N, BITCOINJ_SCRYPT_R, BITCOINJ_SCRYPT_P, KEY_LENGTH);
+            byte[] keyBytes = SCrypt.generate(passwordBytes, salt, BITCOINJ_SCRYPT_N, BITCOINJ_SCRYPT_R, BITCOINJ_SCRYPT_P, KEY_LENGTH);
             return new KeyParameter(keyBytes);
         } catch (Exception e) {
             throw new KeyCrypterException("Could not generate key from password and salt.", e);
