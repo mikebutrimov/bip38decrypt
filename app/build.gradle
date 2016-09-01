@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion '23.0.3'
     defaultConfig {
-        applicationId "org.unhack.bip38decrypt"
+        applicationId 'org.unhack.bip38decrypt'
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 201
