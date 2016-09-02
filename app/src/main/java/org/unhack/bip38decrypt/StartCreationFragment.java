@@ -69,7 +69,9 @@ public class StartCreationFragment extends mFragment implements imFragment {
         tv_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),getString(R.string.notimplemented),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(),getString(R.string.notimplemented),Toast.LENGTH_LONG).show();
+                Intent generate_activity_intent = new Intent(getContext(), GenerateActivity.class);
+                startActivity(generate_activity_intent);
             }
         });
 
