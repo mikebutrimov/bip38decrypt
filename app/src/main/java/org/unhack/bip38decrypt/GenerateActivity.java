@@ -44,10 +44,8 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 
 import net.bither.bitherj.crypto.ECKey;
-
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
-
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -70,7 +68,6 @@ public class GenerateActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private static void generateAddress(final String targetPhrase) {
@@ -86,16 +83,9 @@ public class GenerateActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(ECKey key) {
                     if (key.toAddress().toString().contains(targetPhrase)) {
-                        /*
-                        System.out.println("Found in " + MINUTES.convert((System.nanoTime() - timeStart), NANOSECONDS) + " minutes");
-                        System.out.println("Address: " + key.toAddress(NET_PARAMS));
-                        System.out.println("Private Key: " + key.getPrivKey());
-                        */
                         String lesText = "Found in " + MINUTES.convert((System.nanoTime() - timeStart), NANOSECONDS) + " minutes" +
                                 "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
-                        //textview4.setText(lesText);
                         Log.d("GENERATE", lesText);
-
                     }
                     execService.shutdownNow();
                 }
@@ -109,7 +99,5 @@ public class GenerateActivity extends AppCompatActivity {
 
         }
     }
-
-
 
 }

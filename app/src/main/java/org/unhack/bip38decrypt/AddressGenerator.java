@@ -74,14 +74,12 @@ public class AddressGenerator implements Callable<ECKey> {
     @Override
     public ECKey call() throws Exception {
         ECKey key;
-
         do {
             key = ECKey.generateECKey(rnd);
             attempts++;
             logAttempts();
         } while (!(key.toAddress().toString().contains(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
-
 
         return key;
     }
@@ -104,13 +102,11 @@ public class AddressGenerator implements Callable<ECKey> {
      */
     private static boolean isValidBTCAddressSubstring(final String substring) {
         boolean validity = true;
-
         if (!CharMatcher.JAVA_LETTER_OR_DIGIT.matchesAllOf(substring) ||
                 substring.length() > BTC_ADDRESS_MAX_LENGTH ||
                 CharMatcher.anyOf("OIl0").matchesAnyOf(substring)) {
             validity = false;
         }
-
         return validity;
     }
 }
