@@ -70,7 +70,7 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent startCreateIntent = new Intent(getApplicationContext(), createService.class);
-                startCreateIntent.putExtra("vanity","");
+                startCreateIntent.putExtra("vanity","13");
                 startService(startCreateIntent);
             }
         });

@@ -27,6 +27,7 @@ public class createService extends IntentService {
     private String vanity = null;
     private static ECKey createdKey;
     private static boolean isSet = false;
+    public static Thread worker;
     public createService() {
         super("createService");
     }
@@ -42,7 +43,13 @@ public class createService extends IntentService {
                 vanity = null;
             }
             phrase = phrase + vanity;
-            generateAddress(phrase);
+            worker = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    generateAddress(phrase);
+                }
+            });
+            worker.start();
         }
     }
 
@@ -81,5 +88,8 @@ public class createService extends IntentService {
             String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
             Log.d("GENERATE", lesText);
         }
+    }
+    public static Thread getworker(){
+        return worker;
     }
 }
