@@ -78,7 +78,7 @@ public class AddressGenerator implements Callable<ECKey> {
             key = ECKey.generateECKey(rnd);
             attempts++;
             logAttempts();
-        } while (!(key.toAddress().toString().contains(targetPhrase)) &&
+        } while (!(key.toAddress().toString().startsWith(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
 
         return key;

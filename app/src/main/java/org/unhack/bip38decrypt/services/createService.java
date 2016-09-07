@@ -2,24 +2,31 @@ package org.unhack.bip38decrypt.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
+
+import net.bither.bitherj.crypto.ECKey;
+
+import org.unhack.bip38decrypt.Utils;
+import org.unhack.bip38decrypt.createactivity.AddressGenerator;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p/>
- * TODO: Customize class - update intent actions and extra parameters.
- */
+
 public class createService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    public static final String ACTION_FOO = "org.unhack.bip38decrypt.services.action.FOO";
-    public static final String ACTION_BAZ = "org.unhack.bip38decrypt.services.action.BAZ";
-
-    // TODO: Rename parameters
-    public static final String EXTRA_PARAM1 = "org.unhack.bip38decrypt.services.extra.PARAM1";
-    public static final String EXTRA_PARAM2 = "org.unhack.bip38decrypt.services.extra.PARAM2";
-
+    private String phrase = "1";
+    private String vanity = null;
+    private static ECKey createdKey;
+    private static boolean isSet = false;
     public createService() {
         super("createService");
     }
@@ -27,34 +34,52 @@ public class createService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
+            try {
+                vanity = intent.getStringExtra("vanity");
             }
+            catch (NullPointerException e){
+                //Oooops string was empty
+                vanity = null;
+            }
+            phrase = phrase + vanity;
+            generateAddress(phrase);
         }
     }
 
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
+    private static void generateAddress(final String targetPhrase) {
+        final int cores = Runtime.getRuntime().availableProcessors();
+        final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
+        final long timeStart = System.nanoTime();
+        for (int i = 0; i < cores; i++) {
+            Callable<ECKey> callable = new AddressGenerator(targetPhrase);
+            ListenableFuture<ECKey> future = execService.submit(callable);
+            Futures.addCallback(future, new FutureCallback<ECKey>() {
+                @Override
+                public void onSuccess(ECKey key) {
+                    if (key.toAddress().toString().startsWith(targetPhrase)) {
+                        setCreatedKey(key);
+                    }
+                    execService.shutdownNow();
+                }
+                @Override
+                @ParametersAreNonnullByDefault
+                public void onFailure(Throwable thrown) {
+                    Log.d("generator",thrown.getMessage());
+                }
+            });
+        }
+    }
+    private static synchronized boolean lockKey(){
+        boolean isLocked = isSet;
+        isSet = true;
+        return isLocked;
     }
 
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
+    private static  void setCreatedKey(ECKey key){
+        if (!lockKey()){
+            createdKey = key;
+            String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
+            Log.d("GENERATE", lesText);
+        }
     }
 }

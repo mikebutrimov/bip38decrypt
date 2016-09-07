@@ -28,6 +28,7 @@ and slightly modified to get rid of bitcoinj library
  */
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,6 +47,7 @@ import net.bither.bitherj.crypto.ECKey;
 
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
+import org.unhack.bip38decrypt.services.createService;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -67,40 +69,13 @@ public class CreateActivity extends AppCompatActivity {
         lesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateAddress("stormos");
+                Intent startCreateIntent = new Intent(getApplicationContext(), createService.class);
+                startCreateIntent.putExtra("vanity","");
+                startService(startCreateIntent);
             }
         });
 
     }
 
-    private static void generateAddress(final String targetPhrase) {
-        final int cores = Runtime.getRuntime().availableProcessors();
-        final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
-        final long timeStart = System.nanoTime();
-
-        for (int i = 0; i < cores; i++) {
-            Callable<ECKey> callable = new AddressGenerator(targetPhrase);
-            ListenableFuture<ECKey> future = execService.submit(callable);
-            Futures.addCallback(future, new FutureCallback<ECKey>() {
-
-                @Override
-                public void onSuccess(ECKey key) {
-                    if (key.toAddress().toString().contains(targetPhrase)) {
-                        String lesText = "Found in " + MINUTES.convert((System.nanoTime() - timeStart), NANOSECONDS) + " minutes" +
-                                "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
-                        Log.d("GENERATE", lesText);
-                    }
-                    execService.shutdownNow();
-                }
-
-                @Override
-                @ParametersAreNonnullByDefault
-                public void onFailure(Throwable thrown) {
-                    Log.d("generator",thrown.getMessage());
-                }
-            });
-
-        }
-    }
 
 }
