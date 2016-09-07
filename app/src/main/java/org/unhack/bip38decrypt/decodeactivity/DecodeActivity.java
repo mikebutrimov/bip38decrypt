@@ -1,4 +1,4 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.decodeactivity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -19,6 +18,11 @@ import java.util.List;
 
 import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
+
+import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
+import org.unhack.bip38decrypt.adaptors.NonSwipeableViewPager;
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.mfragments.mFragment;
 
 public class DecodeActivity extends AppCompatActivity {
     public static MixedPagerAdapter decodePagerAdapter;

@@ -1,8 +1,5 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.decodeactivity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.mfragments.imFragment;
+import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.bip38service;
 
 /**
  * Created by unhack on 8/3/16.

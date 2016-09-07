@@ -1,12 +1,14 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.adaptors;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import org.unhack.bip38decrypt.MainActivity;
+import org.unhack.bip38decrypt.mfragments.mFragment;
 
 import java.util.ArrayList;
 import java.util.List;

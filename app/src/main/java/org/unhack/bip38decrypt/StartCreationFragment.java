@@ -1,27 +1,20 @@
 package org.unhack.bip38decrypt;
 
 
-import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
-import org.w3c.dom.Text;
+import org.unhack.bip38decrypt.createactivity.CreateActivity;
+import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
+import org.unhack.bip38decrypt.mfragments.imFragment;
+import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.bip38service;
 
 /**
  * Created by unhack on 6/23/16.
@@ -70,7 +63,7 @@ public class StartCreationFragment extends mFragment implements imFragment {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getContext(),getString(R.string.notimplemented),Toast.LENGTH_LONG).show();
-                Intent generate_activity_intent = new Intent(getContext(), GenerateActivity.class);
+                Intent generate_activity_intent = new Intent(getContext(), CreateActivity.class);
                 startActivity(generate_activity_intent);
             }
         });

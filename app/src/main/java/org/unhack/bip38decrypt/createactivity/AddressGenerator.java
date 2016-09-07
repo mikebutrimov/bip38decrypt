@@ -1,4 +1,4 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.createactivity;
 /*
 The MIT License (MIT)
 

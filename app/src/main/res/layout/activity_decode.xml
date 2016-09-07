@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="org.unhack.bip38decrypt.DecodeActivity">
+    tools:context=".decodeactivity.DecodeActivity">
 
 
-    <org.unhack.bip38decrypt.NonSwipeableViewPager
+    <org.unhack.bip38decrypt.adaptors.NonSwipeableViewPager
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/decode_container"

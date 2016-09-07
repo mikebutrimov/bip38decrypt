@@ -1,10 +1,14 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.decodeactivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.mfragments.imFragment;
+import org.unhack.bip38decrypt.mfragments.mFragment;
 
 /**
  * Created by unhack on 7/28/16.

@@ -1,4 +1,4 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.mfragments;
 
 /**
  * Created by unhack on 6/23/16.

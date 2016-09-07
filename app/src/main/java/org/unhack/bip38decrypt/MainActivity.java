@@ -23,6 +23,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
+import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 136;

@@ -1,4 +1,4 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.adaptors;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;

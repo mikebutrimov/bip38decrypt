@@ -1,6 +1,8 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.mfragments;
 
 import android.support.v4.app.Fragment;
+
+import org.unhack.bip38decrypt.mfragments.imFragment;
 
 /**
  * Created by unhack on 6/23/16.

@@ -18,7 +18,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
-import org.w3c.dom.Text;
+import org.unhack.bip38decrypt.mfragments.imFragment;
+import org.unhack.bip38decrypt.mfragments.mFragment;
 
 /**
  * Created by unhack on 6/23/16.

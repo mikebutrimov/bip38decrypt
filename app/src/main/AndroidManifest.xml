@@ -26,11 +26,11 @@
         </activity>
 
         <service
-            android:name=".bip38service"
+            android:name=".services.bip38service"
             android:exported="false" />
 
         <activity
-            android:name=".DecodeActivity"
+            android:name=".decodeactivity.DecodeActivity"
             android:label="@string/title_activity_decode"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
@@ -41,12 +41,12 @@
         </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:parentActivityName=".DecodeActivity"
+            android:parentActivityName=".decodeactivity.DecodeActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
         <activity android:name=".AboutActivity" />
         <activity
-            android:name=".GenerateActivity"
+            android:name=".createactivity.CreateActivity"
             android:label="@string/title_activity_generate"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -54,6 +54,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.unhack.bip38decrypt.MainActivity" />
         </activity>
+
+        <service
+            android:name=".services.createService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

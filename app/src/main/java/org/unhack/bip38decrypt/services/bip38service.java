@@ -1,4 +1,5 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.services;
+
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +9,17 @@ import net.bither.bitherj.crypto.ECKey;
 import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
 
+import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
+import org.unhack.bip38decrypt.MainActivity;
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.Utils;
+
 public class bip38service extends IntentService {
     private String res,wallet,address;
     public static  boolean IAM = false;
     public static Thread worker;
     public bip38service() {
-        super("bip38service");
+        super("org.unhack.bip38decrypt.services.bip38service");
     }
 
     @Override

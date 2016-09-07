@@ -1,5 +1,4 @@
-package org.unhack.bip38decrypt;
-/*
+package org.unhack.bip38decrypt.createactivity;/*
 The MIT License (MIT)
 
 Copyright (c) 2015 lifeofreilly
@@ -44,6 +43,10 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 
 import net.bither.bitherj.crypto.ECKey;
+
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.Utils;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
@@ -52,7 +55,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 
-public class GenerateActivity extends AppCompatActivity {
+public class CreateActivity extends AppCompatActivity {
 
     public static TextView textview4;
     @Override

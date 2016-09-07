@@ -1,4 +1,4 @@
-package org.unhack.bip38decrypt;
+package org.unhack.bip38decrypt.decodeactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,11 +13,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.google.common.util.concurrent.ExecutionError;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
+
+import org.unhack.bip38decrypt.R;
+import org.unhack.bip38decrypt.mfragments.imFragment;
+import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.bip38service;
 
 /**
  * Created by unhack on 7/27/16.
