@@ -88,7 +88,7 @@ public class CreateActivity extends AppCompatActivity {
             byte[] buf = Utils.hexStringToByteArray("00ffffffffffffffffffffffffffffffffffffffffffffffff");
             biggest_niumber = new BigDecimal(new BigInteger(buf));
             String pattern,smallest,p_buf,s_buf;
-            pattern = "1Abc";
+            pattern = "111";
             String pattern_word = "";
             //setp1 count leading 1's
             int zero_count = 0;
@@ -134,6 +134,22 @@ public class CreateActivity extends AppCompatActivity {
             Log.d("SUBS", bgn_range.toString());
             BigDecimal bgn_dif = biggest_niumber.divide(bgn_range, 2, RoundingMode.HALF_UP);
             Log.d("BGN DIF", bgn_dif.toString());
+
+
+
+            //test section
+            String high = "1AAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
+            String low = "11111111111111111111111111111111AA";
+            byte[] _low = Base58.decode(low);
+            byte[] _high = Base58.decode(high);
+            BigDecimal _bnlow = new BigDecimal(new BigInteger(_low));
+            BigDecimal _bnhigh = new BigDecimal(new BigInteger(_high));
+
+            Log.d("__TEST__ HLR",_bnlow.toString() + " " + _bnhigh.toString());
+            bgn_dif = biggest_niumber.divide((_bnhigh.subtract(_bnlow)), 2, RoundingMode.HALF_UP);
+            Log.d("__TEST__ DIF", bgn_dif.toString());
+
+            //end of test section
 
 
        } catch (AddressFormatException e) {
