@@ -65,9 +65,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class CreateActivity extends AppCompatActivity {
 
     public static TextView textview4;
-    BigDecimal begin_test;
     BigDecimal biggest_niumber;
-    BigDecimal end_test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,12 +81,19 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public String getDif(String pattern) {
+        if (pattern.isEmpty()){
+            Log.d("getDif","Empty string");
+            return null;
+        }
         try {
-            //New potential biggest number.
-            byte[] buf = Utils.hexStringToByteArray("00ffffffffffffffffffffffffffffffffffffffffffffffff");
-            biggest_niumber = new BigDecimal(new BigInteger(buf));
-            String pattern,smallest,p_buf,s_buf;
-            pattern = "111";
+            //Number of all possible addresses
+            biggest_niumber = BigDecimal.valueOf(Math.pow(2,160));
+            boolean zeroPrefix = false;
+            BigDecimal pattern_prefix;
+            String smallest,p_buf,s_buf;
             String pattern_word = "";
             //setp1 count leading 1's
             int zero_count = 0;
@@ -104,64 +109,64 @@ public class CreateActivity extends AppCompatActivity {
                 else {
                     pattern_word = pattern_word + pattern.charAt(i);
                 }
+                if (zero_count>=19){
+                    //we can not have so much 1's in the pattern
+                    throw new AddressFormatException();
+                }
             }
             //pattern - initial pattern
             //pattern_word - everything expect leading 1's
             //zero_count - number of leading 1's
-            int hex_length = 50 - (2*zero_count);
+            int bin_len = 200 - (8*zero_count);
             int i = 0;
-            //hex_length - length of hex representation of bigint of our range
-            String hex_range_top,hex_range_bottom,hex_range_top_buf,hex_range_bottom_buf;
-            hex_range_top = hex_range_bottom = hex_range_top_buf = hex_range_bottom_buf = "00"+Utils.bytesToHex(Base58.decode(pattern_word));
-            while (hex_range_bottom_buf.length() <= 50 && hex_range_top_buf.length() <= 50 && i<= hex_length){
-                hex_range_bottom = hex_range_bottom_buf;
-                hex_range_top = hex_range_top_buf;
-                hex_range_bottom_buf = hex_range_bottom_buf + "0";
-                hex_range_top_buf = hex_range_top_buf + "f";
-                i++;
+            byte[] zero = Utils.hexStringToByteArray("00");
+            try {
+                pattern_prefix = new BigDecimal(new BigInteger(Base58.decode(pattern_word)));
             }
-
-            Log.d("WORDS", String.valueOf(zero_count)+"   " +pattern.toString() + "  " + pattern_word.toString());
-            Log.d("RANGES",String.valueOf(hex_length) + "   "+ hex_range_top + "  " + hex_range_bottom);
-            //brilliant. calculate difficult
-            byte[] range_bottom, range_top;
-            range_bottom = Utils.hexStringToByteArray(hex_range_bottom);
-            range_top = Utils.hexStringToByteArray(hex_range_top);
-            BigDecimal bgn_top = new BigDecimal(new BigInteger(range_top));
-            BigDecimal bgn_bottom = new BigDecimal(new BigInteger(range_bottom));
-            BigDecimal bgn_range = bgn_top.subtract(bgn_bottom);
-            Log.d("NUMBERS:", bgn_top.toString()+"   "+ bgn_bottom.toString());
-            Log.d("SUBS", bgn_range.toString());
-            BigDecimal bgn_dif = biggest_niumber.divide(bgn_range, 2, RoundingMode.HALF_UP);
-            Log.d("BGN DIF", bgn_dif.toString());
-
-
-
-            //test section
-            String high = "1AAzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz";
-            String low = "11111111111111111111111111111111AA";
-            byte[] _low = Base58.decode(low);
-            byte[] _high = Base58.decode(high);
-            BigDecimal _bnlow = new BigDecimal(new BigInteger(_low));
-            BigDecimal _bnhigh = new BigDecimal(new BigInteger(_high));
-
-            Log.d("__TEST__ HLR",_bnlow.toString() + " " + _bnhigh.toString());
-            bgn_dif = biggest_niumber.divide((_bnhigh.subtract(_bnlow)), 2, RoundingMode.HALF_UP);
-            Log.d("__TEST__ DIF", bgn_dif.toString());
-
-            //end of test section
-
-
-       } catch (AddressFormatException e) {
+            catch (Exception e){
+                Log.d("Zero?","yup, Zero");
+                pattern_prefix = new BigDecimal(BigInteger.valueOf(0));
+                zeroPrefix = true;
+            }
+            BigDecimal top = new BigDecimal(new BigInteger(zero));
+            BigDecimal bottom = new BigDecimal(new BigInteger(zero));
+            BigDecimal buf_top = new BigDecimal(new BigInteger(zero));
+            BigDecimal buf_bottom = new BigDecimal(new BigInteger(zero));
+            BigDecimal buffer = new BigDecimal(new BigInteger(zero));
+            if (zeroPrefix){
+                buffer = BigDecimal.valueOf(Math.pow(2,bin_len));
+            }
+            else {
+                //set pow to 1
+                int n = 1;
+                while (top.toBigInteger().bitLength() <= (bin_len + 8)) {
+                    buf_bottom = bottom;
+                    buf_top = top;
+                    bottom = pattern_prefix.multiply(BigDecimal.valueOf(Math.pow(58, n)));
+                    top = bottom.add((BigDecimal.valueOf(Math.pow(58, n)))).subtract(BigDecimal.valueOf(1));
+                    Log.d("Numbers", bottom.toString() + " " + top.toString());
+                    if (buf_bottom.toBigInteger().bitLength() > (bin_len - 8)
+                            && buf_bottom.toBigInteger().bitLength() <= bin_len
+                            && buf_top.toBigInteger().bitLength() <= bin_len) {
+                        int compareBottom = buf_bottom.compareTo(BigDecimal.valueOf(Math.pow(2, 192)));
+                        int compareTop = buf_top.compareTo(BigDecimal.valueOf(Math.pow(2, 192)));
+                        if (compareTop == -1 && compareBottom == -1) {
+                            buffer = buffer.add(buf_top).subtract(buf_bottom);
+                        } else if (compareTop == 1 && compareBottom == -1) {
+                            buffer = buffer.add(BigDecimal.valueOf(Math.pow(2, 192))).subtract(buf_bottom);
+                        }
+                    }
+                    n = n + 1;
+                }
+            }
+            Log.d("BUF TOP",buf_top.toString());
+            buffer = buffer.divide(BigDecimal.valueOf(Math.pow(256,4)),1,BigDecimal.ROUND_UP);
+            String res = biggest_niumber.divide(buffer,0,BigDecimal.ROUND_DOWN).toString();
+            Log.d("DIFF", res);
+            return res;
+        } catch (AddressFormatException e) {
             e.printStackTrace();
         }
-
-
-
-
-
-
+        return null;
     }
-
-
 }
