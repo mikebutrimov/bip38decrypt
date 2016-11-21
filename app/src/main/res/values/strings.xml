@@ -18,6 +18,9 @@
     <string name="notBipKey">Sorry. It\'s not BIP38 wallet</string>
     <string name="wrongPassword">Sorry, wrong password</string>
     <string name="notimplemented">Not implemented yet</string>
+    <string name="aboutDifficulty">Current difficulty:</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="address_will_be">Address will be like: \n</string>
 
     <string name="button_next">Next</string>
     <string name="button_back">Back</string>

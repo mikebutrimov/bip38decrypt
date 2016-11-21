@@ -63,7 +63,7 @@ public class createService extends IntentService {
             Futures.addCallback(future, new FutureCallback<ECKey>() {
                 @Override
                 public void onSuccess(ECKey key) {
-                    if (key.toAddress().toString().startsWith(targetPhrase)) {
+                    if (key.toAddress().startsWith(targetPhrase)) {
                         setCreatedKey(key);
                     }
                     execService.shutdownNow();

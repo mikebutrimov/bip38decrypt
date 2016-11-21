@@ -35,6 +35,9 @@ import com.google.common.base.CharMatcher;
 
 import net.bither.bitherj.crypto.ECKey;
 
+
+import org.unhack.bip38decrypt.Utils;
+
 import java.security.SecureRandom;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -52,17 +55,13 @@ public class AddressGenerator implements Callable<ECKey> {
      * Sole constructor for AddressGenerator
      *
      * @param targetPhrase the desired bitcoin address substring
-     * @param netParams    the target bitcoin network e.g production or testnet
      */
     public AddressGenerator(final String targetPhrase) {
-        //this.netParams = netParams;
-
-        if (isValidBTCAddressSubstring(targetPhrase)) {
+        if (Utils.isValidBTCAddressSubstring(targetPhrase)) {
             this.targetPhrase = targetPhrase;
         } else {
             throw new IllegalArgumentException("The requested phrase is not a valid bitcoin address substring.");
         }
-
     }
 
     /**
@@ -78,9 +77,8 @@ public class AddressGenerator implements Callable<ECKey> {
             key = ECKey.generateECKey(rnd);
             attempts++;
             logAttempts();
-        } while (!(key.toAddress().toString().startsWith(targetPhrase)) &&
+        } while (!(key.toAddress().startsWith(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
-
         return key;
     }
 
@@ -100,13 +98,4 @@ public class AddressGenerator implements Callable<ECKey> {
      * @param substring the requested phrase
      * @return true if the requested phrase is a valid bitcoin address substring
      */
-    private static boolean isValidBTCAddressSubstring(final String substring) {
-        boolean validity = true;
-        if (!CharMatcher.JAVA_LETTER_OR_DIGIT.matchesAllOf(substring) ||
-                substring.length() > BTC_ADDRESS_MAX_LENGTH ||
-                CharMatcher.anyOf("OIl0").matchesAnyOf(substring)) {
-            validity = false;
-        }
-        return validity;
-    }
 }
