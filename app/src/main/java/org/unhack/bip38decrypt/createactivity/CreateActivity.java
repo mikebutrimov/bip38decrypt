@@ -28,15 +28,22 @@ and slightly modified to get rid of bitcoinj library
  */
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.bither.bitherj.crypto.ECKey;
@@ -49,21 +56,20 @@ import org.unhack.bip38decrypt.services.createService;
 import java.security.SecureRandom;
 
 public class CreateActivity extends AppCompatActivity {
+    public final int cores = Runtime.getRuntime().availableProcessors();
+    public double speed = 0;
+    public  TextView textView_performance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
         Button lesButton = (Button) findViewById(R.id.button);
-        TextView textView_performance = (TextView) findViewById(R.id.textView_performance);
-        final int cores = Runtime.getRuntime().availableProcessors();
-        long test_result = speedTest();
-        double speed = (100.0/test_result)*1000*cores;
-
+        textView_performance = (TextView) findViewById(R.id.textView_performance);
+        speed = speedTest();
         textView_performance.setText( String.format("Cores available: "+String.valueOf(cores)+ "\nAddresses per second: %.2f",speed));
         final TextView textView_difficulty = (TextView) findViewById(R.id.textView_calculatedDifficulty);
         final TextView textView_addresswillbelike = (TextView) findViewById(R.id.textView_addresswillbelike);
         final EditText editText_vanity = (EditText) findViewById(R.id.editText_vanity);
-
         editText_vanity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,16 +102,19 @@ public class CreateActivity extends AppCompatActivity {
     }
 
 
-    long speedTest(){
-        long test_begin = System.currentTimeMillis();
+
+
+
+    double speedTest(){
         ECKey key;
         SecureRandom rnd = new SecureRandom();
-        for (int i = 0; i< 100; i++){
+        int keys = 0;
+        long test_end = System.currentTimeMillis()+250;
+        while (System.currentTimeMillis() < test_end){
             key = ECKey.generateECKey(rnd);
+            keys++;
         }
-        long test_end = System.currentTimeMillis();
-        Log.d("Delta T", String.valueOf(test_end - test_begin));
-        return (test_end - test_begin);
+        return keys*4*cores;
     }
 
 }
