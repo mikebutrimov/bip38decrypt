@@ -57,6 +57,9 @@
 
         <service
             android:name=".services.createService"
+            android:exported="false" />
+        <service
+            android:name=".services.speedtest"
             android:exported="false"></service>
     </application>
 

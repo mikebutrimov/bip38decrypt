@@ -17,5 +17,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/button_oops"
         android:layout_gravity="center_horizontal"
-        android:text="@string/button_oops" />
+        android:text="@string/button_oops"
+        android:background="@android:drawable/screen_background_light_transparent" />
 </LinearLayout>

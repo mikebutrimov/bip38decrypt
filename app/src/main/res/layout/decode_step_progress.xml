@@ -25,5 +25,6 @@
         android:id="@+id/button_cancel"
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
-        android:text="@string/button_cancel" />
+        android:text="@string/button_cancel"
+        android:background="@android:drawable/screen_background_light_transparent" />
 </LinearLayout>

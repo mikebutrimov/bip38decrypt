@@ -28,93 +28,75 @@ and slightly modified to get rid of bitcoinj library
  */
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import net.bither.bitherj.crypto.ECKey;
-
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
+import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
+import org.unhack.bip38decrypt.adaptors.NonSwipeableViewPager;
+import org.unhack.bip38decrypt.mfragments.mFragment;
 import org.unhack.bip38decrypt.services.createService;
+import org.unhack.bip38decrypt.services.speedtest;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import java.security.SecureRandom;
 
 public class CreateActivity extends AppCompatActivity {
+    public static MixedPagerAdapter createPagerAdapter;
+    private NonSwipeableViewPager viewPager;
     public final int cores = Runtime.getRuntime().availableProcessors();
     public double speed = 0;
     public  TextView textView_performance;
+    public final static String SPEEDTEST_FILTER = "org.unhack.bip38decrypt.SPEEDTEST_FILTER";
+    private BroadcastReceiver mSppedtestReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int speed = intent.getIntExtra("speed",0);
+            textView_performance = (TextView) findViewById(R.id.textView_performance);
+            textView_performance.setText( String.format("Cores available: "+String.valueOf(cores)+ "\nAddresses per second: %d",speed));
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        registerReceiver(mSppedtestReciever, new IntentFilter(SPEEDTEST_FILTER));
         setContentView(R.layout.activity_create);
-        Button lesButton = (Button) findViewById(R.id.button);
-        textView_performance = (TextView) findViewById(R.id.textView_performance);
-        speed = speedTest();
-        textView_performance.setText( String.format("Cores available: "+String.valueOf(cores)+ "\nAddresses per second: %.2f",speed));
-        final TextView textView_difficulty = (TextView) findViewById(R.id.textView_calculatedDifficulty);
-        final TextView textView_addresswillbelike = (TextView) findViewById(R.id.textView_addresswillbelike);
-        final EditText editText_vanity = (EditText) findViewById(R.id.editText_vanity);
-        editText_vanity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        Intent speedTestIntent = new Intent(this, speedtest.class);
+        startService(speedTestIntent);
+        List<mFragment> fragments = new ArrayList<mFragment>();
+        cInputFragment inputFragment = new cInputFragment();
+        fragments.add(inputFragment);
+        initPaging(fragments);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String pattern = editText_vanity.getText().toString();
-                pattern = "1" + pattern;
-                String diff = Utils.getDif(pattern);
-                textView_difficulty.setText(diff);
-                textView_addresswillbelike.setText(getText(R.string.address_will_be) + pattern);
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-
-        lesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent startCreateIntent = new Intent(getApplicationContext(), createService.class);
-                startCreateIntent.putExtra("vanity","13");
-                startService(startCreateIntent);
-            }
-        });
     }
 
-
-
-
-
-    double speedTest(){
-        ECKey key;
-        SecureRandom rnd = new SecureRandom();
-        int keys = 0;
-        long test_end = System.currentTimeMillis()+250;
-        while (System.currentTimeMillis() < test_end){
-            key = ECKey.generateECKey(rnd);
-            keys++;
+    private void initPaging(List<mFragment> fragments) {
+        createPagerAdapter = new MixedPagerAdapter(getSupportFragmentManager());
+        for (mFragment frg: fragments){
+            createPagerAdapter.addFragment(frg);
         }
-        return keys*4*cores;
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.create_container);
+        if (viewPager != null) {
+            viewPager.setAdapter(createPagerAdapter);
+            viewPager.setPagingEnabled(false);
+        }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mSppedtestReciever);
+    }
 }

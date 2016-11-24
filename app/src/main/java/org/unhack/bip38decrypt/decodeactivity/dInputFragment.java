@@ -71,7 +71,7 @@ public class dInputFragment extends mFragment implements imFragment {
         edittext_wallet = (EditText) view.findViewById(R.id.editText_wallet);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_passphrase);
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_showcontent);
-        button_back = (Button) view.findViewById(R.id.button_back);
+        button_back = (Button) view.findViewById(R.id.button_create_back);
         button_next = (Button) view.findViewById(R.id.button_next);
         button_scan = (ImageButton) view.findViewById(R.id.button_scan);
         //check for show content

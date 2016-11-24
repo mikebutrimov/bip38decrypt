@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_vanity"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Vanity pattern" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView_calculatedDifficulty"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_above="@+id/textView_addresswillbelike" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView_addresswillbelike"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/editText_vanity"
+        android:textSize="18sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView_performance"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@+id/textView_performance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editText_walletname"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:hint="Wallet name" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:layout_below="@+id/editText_walletname"
+        android:id="@+id/editText_wallets2generate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/button_dec_wallets"
+        android:layout_toLeftOf="@+id/button_dec_wallets"
+        android:hint="Wallets to generate (1)"
+        android:textSize="18sp" />
+
+    <Button
+        android:text="+"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_inc_wallets"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:layout_alignBaseline="@+id/button_dec_wallets"
+        android:layout_alignBottom="@+id/button_dec_wallets"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="-"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_dec_wallets"
+        android:background="@android:drawable/screen_background_light_transparent"
+        android:layout_toLeftOf="@+id/button_inc_wallets"
+        android:layout_toStartOf="@+id/button_inc_wallets"
+        android:layout_alignBottom="@+id/editText_wallets2generate" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:layout_below="@+id/editText_wallets2generate"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/editText_create_password"
+        android:layout_toStartOf="@+id/button_dec_wallets"
+        android:layout_toLeftOf="@+id/button_dec_wallets"
+        android:hint="@string/edittext_passphrase" />
+
+    <CheckBox
+        android:text="@string/checkBoxShowPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_inc_wallets"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/checkBox_create_show_content"
+        android:layout_alignBottom="@+id/editText_create_password"
+        android:layout_toRightOf="@+id/editText_wallets2generate"
+        android:layout_toEndOf="@+id/editText_wallets2generate"
+        android:textSize="18sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
+        android:text="@string/button_back"
+        android:id="@+id/button_create_back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@android:drawable/screen_background_light_transparent" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+        android:text="@string/button_next"
+        android:id="@+id/button_create_next"
+        android:layout_alignTop="@+id/button_create_back"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@android:drawable/screen_background_light_transparent" />
+
+</RelativeLayout>
