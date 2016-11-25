@@ -27,7 +27,6 @@ public class createService extends IntentService {
     private String vanity = null;
     private static ECKey createdKey;
     private static boolean isSet = false;
-    private int number_of_wallets;
     public static Thread worker;
     public createService() {
         super("createService");
@@ -43,18 +42,15 @@ public class createService extends IntentService {
                 //Oooops string was empty
                 vanity = null;
             }
-            number_of_wallets = intent.getIntExtra("wallets",1);
 
             phrase = phrase + vanity;
-            for (int i = 0; i< number_of_wallets; i++) {
-                worker = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        generateAddress(phrase);
-                    }
-                });
-                worker.start();
-            }
+            worker = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    generateAddress(phrase);
+                }
+            });
+            worker.start();
         }
     }
 
