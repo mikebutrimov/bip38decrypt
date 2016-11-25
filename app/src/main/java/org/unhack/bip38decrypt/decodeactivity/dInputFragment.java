@@ -83,6 +83,7 @@ public class dInputFragment extends mFragment implements imFragment {
                 showContent(v);
             }
         });
+
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
