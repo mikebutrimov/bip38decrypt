@@ -116,7 +116,13 @@ public class cInputFragment extends mFragment implements imFragment {
                 mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
                 mCreateDataBundle.putString("title", editText_title.getText().toString());
                 mCreateDataBundle.putString("vanity", editText_vanity.getText().toString());
-                mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
+                try {
+                    mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
+                }
+                catch (NumberFormatException nfe){
+                    nfe.printStackTrace();
+                    mCreateDataBundle.putInt("wallets",1);
+                }
                 cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
                 mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
                 CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
