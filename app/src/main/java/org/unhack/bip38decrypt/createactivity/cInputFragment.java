@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
@@ -26,8 +27,8 @@ import org.unhack.bip38decrypt.mfragments.mFragment;
  */
 
 public class cInputFragment extends mFragment implements imFragment {
-    private Button button_inc_wallets, button_dec_wallets;
-    EditText editText_wallets2generate,edittext_passphrase ;
+    private Button button_inc_wallets, button_dec_wallets, button_back, button_next;
+    EditText editText_wallets2generate,edittext_passphrase, editText_title ;
     CheckBox checkbox_showcontent;
 
 
@@ -39,8 +40,12 @@ public class cInputFragment extends mFragment implements imFragment {
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_create_password);
         editText_wallets2generate = (EditText) view.findViewById(R.id.editText_wallets2generate);
+        editText_title = (EditText) view.findViewById(R.id.editText_walletname);
         button_inc_wallets = (Button) view.findViewById(R.id.button_inc_wallets);
         button_dec_wallets = (Button) view.findViewById(R.id.button_dec_wallets);
+        button_back = (Button) view.findViewById(R.id.button_create_back);
+        button_next = (Button) view.findViewById(R.id.button_create_next);
+
         button_inc_wallets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +60,11 @@ public class cInputFragment extends mFragment implements imFragment {
             }
         });
 
+
+
+
+
+
         checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,13 +76,7 @@ public class cInputFragment extends mFragment implements imFragment {
         final TextView textView_addresswillbelike = (TextView) view.findViewById(R.id.textView_addresswillbelike);
         final EditText editText_vanity = (EditText) view.findViewById(R.id.editText_vanity);
         editText_vanity.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            void processtext(){
                 String pattern = editText_vanity.getText().toString();
                 pattern = "1" + pattern;
                 String diff = Utils.getDif(pattern);
@@ -81,7 +85,42 @@ public class cInputFragment extends mFragment implements imFragment {
             }
 
             @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                processtext();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                processtext();
+            }
+
+            @Override
             public void afterTextChanged(Editable s) {
+                processtext();
+            }
+        });
+
+
+
+        button_back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                getActivity().finish();
+            }
+        });
+
+        button_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle mCreateDataBundle = new Bundle();
+                mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
+                mCreateDataBundle.putString("title", editText_title.getText().toString());
+                mCreateDataBundle.putString("vanity", editText_vanity.getText().toString());
+                mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
+                cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
+                mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
+                CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
+                CreateActivity.createPagerAdapter.CoolNavigateToTab(1,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
             }
         });
 
@@ -120,6 +159,13 @@ public class cInputFragment extends mFragment implements imFragment {
         else {
             edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //check for show content
+        showContent(getView());
     }
 
 

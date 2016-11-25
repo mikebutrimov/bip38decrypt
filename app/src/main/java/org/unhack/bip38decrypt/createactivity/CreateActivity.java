@@ -33,19 +33,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.TextView;
 import org.unhack.bip38decrypt.R;
-import org.unhack.bip38decrypt.Utils;
 import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
 import org.unhack.bip38decrypt.adaptors.NonSwipeableViewPager;
 import org.unhack.bip38decrypt.mfragments.mFragment;
-import org.unhack.bip38decrypt.services.createService;
 import org.unhack.bip38decrypt.services.speedtest;
 
 import java.util.ArrayList;
@@ -53,7 +48,9 @@ import java.util.List;
 
 
 public class CreateActivity extends AppCompatActivity {
+    public static final String TABNUMBER = "tab_number";
     public static MixedPagerAdapter createPagerAdapter;
+    public static Handler createSwipeHandler,createErrorHandler;
     private NonSwipeableViewPager viewPager;
     public final int cores = Runtime.getRuntime().availableProcessors();
     public double speed = 0;
@@ -72,6 +69,27 @@ public class CreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerReceiver(mSppedtestReciever, new IntentFilter(SPEEDTEST_FILTER));
+        createSwipeHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                viewPager.setCurrentItem(msg.getData().getInt(TABNUMBER));
+            }
+        };
+
+        /*createErrorHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                //create error fragment, put data into it, set focus to it
+                //we need to bypass error string and button callback
+                //oh fuck, i was looking to the wrong lifecycle scheme
+                Bundle args = msg.getData();
+                cErrorFragment errorFragment = new cErrorFragment();
+                errorFragment.setArguments(args);
+                createPagerAdapter.addFragment(errorFragment);
+                Log.d("errHandler",String.valueOf(createPagerAdapter.getCount()));
+                createPagerAdapter.CoolNavigateToTab(1,TABNUMBER, CreateActivity.createSwipeHandler,false);
+            }
+        };*/
+
+
         setContentView(R.layout.activity_create);
         Intent speedTestIntent = new Intent(this, speedtest.class);
         startService(speedTestIntent);
