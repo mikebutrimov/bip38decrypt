@@ -48,8 +48,10 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
                 if (old_password!=null){
                     if (new_password.equals(old_password)){
                         Bundle mDataBundle = getArguments();
-
-
+                        cStateFragment mcStateFragment = new cStateFragment();
+                        mcStateFragment.setArguments(mDataBundle);
+                        CreateActivity.createPagerAdapter.addFragment(mcStateFragment);
+                        CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
                     }
                     else {
                         //show error

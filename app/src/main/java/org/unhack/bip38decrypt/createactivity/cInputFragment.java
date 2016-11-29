@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ public class cInputFragment extends mFragment implements imFragment {
     private Button button_inc_wallets, button_dec_wallets, button_back, button_next;
     EditText editText_wallets2generate,edittext_passphrase, editText_title ;
     CheckBox checkbox_showcontent;
+    private Long totalCreationTarget;
+    private String vanity;
+
 
 
     @Override
@@ -74,8 +78,17 @@ public class cInputFragment extends mFragment implements imFragment {
         editText_vanity.addTextChangedListener(new TextWatcher() {
             void processtext(){
                 String pattern = editText_vanity.getText().toString();
+                String diff = "0";
                 pattern = "1" + pattern;
-                String diff = Utils.getDif(pattern);
+                try {
+                    diff = Utils.getDif(pattern);
+                }
+                catch (NumberFormatException nfe){
+                    nfe.printStackTrace();
+                    diff = "0";
+                }
+                vanity = pattern;
+                totalCreationTarget = Long.valueOf(diff);
                 textView_difficulty.setText(diff);
                 textView_addresswillbelike.setText(getText(R.string.address_will_be) + pattern);
             }
@@ -111,14 +124,22 @@ public class cInputFragment extends mFragment implements imFragment {
                 Bundle mCreateDataBundle = new Bundle();
                 mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
                 mCreateDataBundle.putString("title", editText_title.getText().toString());
-                mCreateDataBundle.putString("vanity", editText_vanity.getText().toString());
+                mCreateDataBundle.putString("vanity", vanity);
                 try {
                     mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
-                    mCreateDataBundle.putLong("totalCreationTarget", Long.valueOf(Utils.getDif(editText_vanity.getText().toString())));
+                    mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget);
+                    Log.d("CREATION PROGRESS:", String.valueOf(totalCreationTarget));
                 }
                 catch (NumberFormatException nfe){
                     nfe.printStackTrace();
                     mCreateDataBundle.putInt("wallets",1);
+                    try {
+                        mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget);
+                    }
+                    catch (NullPointerException npe){
+                        mCreateDataBundle.putLong("totalCreationTarget", 1);
+                    }
+                    Log.d("CREATION PROGRESS:", String.valueOf(totalCreationTarget));
                 }
 
                 cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();

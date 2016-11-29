@@ -1,7 +1,11 @@
 package org.unhack.bip38decrypt.createactivity;
 
+import android.content.Intent;
+import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.mfragments.imFragment;
 import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.createService;
 
 /**
  * Created by unhack on 11/29/16.
@@ -27,9 +32,11 @@ public class cStateFragment extends mFragment implements imFragment {
     private int encryptionProgress, totalEncryptionTarget, wallets;
     private String password, title, vanity;
     public static Handler onCreateProgressCreateHandler, onStateWorkerHandler;
+    private int cores = Runtime.getRuntime().availableProcessors();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.create_step_progress, container, false);
 
         onCreateProgressCreateHandler = new Handler(){
             public  void handleMessage(android.os.Message msg) {
@@ -71,12 +78,29 @@ public class cStateFragment extends mFragment implements imFragment {
             e.printStackTrace();
         }
 
-        
-
-
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.create_progressBar);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(100);
         button_cancel = (Button) view.findViewById(R.id.button_cancel);
-        view = inflater.inflate(R.layout.create_step_progress, container, false);
+
+
+        //fire up intent services for wallets to create
+        for (int i = 0; i< wallets; i++){
+            Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
+            createIntent.putExtra("vanity", vanity);
+            getContext().startService(createIntent);
+        }
+
+
+        button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
+            }
+        });
+
+
         return view;
     }
 
@@ -84,9 +108,13 @@ public class cStateFragment extends mFragment implements imFragment {
 
 
     public void setCreationProgress(long currProgress){
-        creationProgress = creationProgress + currProgress;
-        int percentage = (int) (creationProgress / totalCreationTarget) * 100;
-        mProgressBar.setProgress(percentage);
+        creationProgress = currProgress * cores;
+        double percentage = creationProgress *100.0/ totalCreationTarget;
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(100);
+        mProgressBar.setProgress((int)percentage);
+        Log.d("CREATE STATUS VARS", String.valueOf(creationProgress) + " " + String.valueOf(totalCreationTarget) + " " + String.valueOf((int) percentage));
+        Log.d("CREATE STATUS FRAGMENT", "Progress is: " + String.valueOf(percentage));
     }
 
     public void setEncryptionProgress(int currProgress){

@@ -17,6 +17,7 @@ import org.unhack.bip38decrypt.createactivity.AddressGenerator;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -34,16 +35,20 @@ public class createService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        phrase = "1";
         if (intent != null) {
             try {
                 vanity = intent.getStringExtra("vanity");
+                if (vanity != null) {
+                    phrase = vanity;
+                }
             }
             catch (NullPointerException e){
                 //Oooops string was empty
                 vanity = null;
             }
 
-            phrase = phrase + vanity;
+            Log.d("CREATE SERVICE PHRASE", phrase);
             worker = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -51,6 +56,7 @@ public class createService extends IntentService {
                 }
             });
             worker.start();
+
         }
     }
 
@@ -59,23 +65,31 @@ public class createService extends IntentService {
         final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
         final long timeStart = System.nanoTime();
         for (int i = 0; i < cores; i++) {
-            Callable<ECKey> callable = new AddressGenerator(targetPhrase);
-            ListenableFuture<ECKey> future = execService.submit(callable);
-            Futures.addCallback(future, new FutureCallback<ECKey>() {
-                @Override
-                public void onSuccess(ECKey key) {
-                    if (key.toAddress().startsWith(targetPhrase)) {
-                        setCreatedKey(key);
+            try {
+                Callable<ECKey> callable = new AddressGenerator(targetPhrase);
+                ListenableFuture<ECKey> future = execService.submit(callable);
+                Futures.addCallback(future, new FutureCallback<ECKey>() {
+                    @Override
+                    public void onSuccess(ECKey key) {
+                        if (key.toAddress().startsWith(targetPhrase)) {
+                            setCreatedKey(key);
+                        }
+                        execService.shutdownNow();
                     }
-                    execService.shutdownNow();
-                }
-                @Override
-                @ParametersAreNonnullByDefault
-                public void onFailure(Throwable thrown) {
-                    Log.d("generator",thrown.getMessage());
-                }
-            });
+
+                    @Override
+                    @ParametersAreNonnullByDefault
+                    public void onFailure(Throwable thrown) {
+                        Log.d("generator", thrown.getMessage());
+                    }
+                });
+            }
+            catch (RejectedExecutionException ree){
+                ree.printStackTrace();
+                return;
+            }
         }
+
     }
     private static synchronized boolean lockKey(){
         boolean isLocked = isSet;
