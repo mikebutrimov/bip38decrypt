@@ -114,11 +114,13 @@ public class cInputFragment extends mFragment implements imFragment {
                 mCreateDataBundle.putString("vanity", editText_vanity.getText().toString());
                 try {
                     mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
+                    mCreateDataBundle.putLong("totalCreationTarget", Long.valueOf(Utils.getDif(editText_vanity.getText().toString())));
                 }
                 catch (NumberFormatException nfe){
                     nfe.printStackTrace();
                     mCreateDataBundle.putInt("wallets",1);
                 }
+
                 cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
                 mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
                 CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);

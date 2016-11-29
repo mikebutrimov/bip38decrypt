@@ -28,13 +28,11 @@ and slightly modified to get rid of bitcoinj library
 
  */
 
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
-import com.google.common.base.CharMatcher;
-
-
 import net.bither.bitherj.crypto.ECKey;
-
 
 import org.unhack.bip38decrypt.Utils;
 
@@ -89,6 +87,11 @@ public class AddressGenerator implements Callable<ECKey> {
         if (attempts % 1000 == 0) {
             Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
                     NumberFormat.getNumberInstance(Locale.US).format(attempts));
+            Message mMsg = new Message();
+            Bundle mBundle = new Bundle();
+            mBundle.putLong("progress", attempts);
+            mMsg.setData(mBundle);
+            cStateFragment.onCreateProgressCreateHandler.sendMessage(mMsg);
         }
     }
 
