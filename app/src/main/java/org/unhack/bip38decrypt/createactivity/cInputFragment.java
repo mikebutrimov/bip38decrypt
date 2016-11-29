@@ -61,10 +61,6 @@ public class cInputFragment extends mFragment implements imFragment {
         });
 
 
-
-
-
-
         checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,10 +125,6 @@ public class cInputFragment extends mFragment implements imFragment {
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(1,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
             }
         });
-
-
-
-
         return view;
     }
 
