@@ -51,13 +51,10 @@ public class createService extends IntentService {
             }
 
             Log.d("CREATE SERVICE PHRASE", phrase);
-            worker = new Thread  (new Runnable() {
+            worker = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     generateAddress(phrase);
-                }
-                public void clearExecPool(){
-                    execService.shutdownNow();
                 }
             });
             worker.start();
@@ -109,5 +106,9 @@ public class createService extends IntentService {
     }
     public static Thread getworker(){
         return worker;
+    }
+
+    public static void clearAllTasks(){
+        execService.shutdownNow();
     }
 }
