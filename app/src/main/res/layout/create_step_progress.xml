@@ -17,8 +17,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_progressBar"
         android:layout_weight="0.7"
-        android:progress="0"
-        android:max="100" />
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:background="@drawable/circle_shape"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"/>
 
     <Button
         android:layout_width="wrap_content"

@@ -79,9 +79,6 @@ public class cStateFragment extends mFragment implements imFragment {
         }
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.create_progressBar);
-        mProgressBar.setIndeterminate(false);
-        mProgressBar.setProgress(0);
-        mProgressBar.setMax(100);
         button_cancel = (Button) view.findViewById(R.id.button_cancel);
 
 
@@ -110,8 +107,6 @@ public class cStateFragment extends mFragment implements imFragment {
     public void setCreationProgress(long currProgress){
         creationProgress = currProgress * cores;
         double percentage = creationProgress *100.0/ totalCreationTarget;
-        mProgressBar.setProgress(0);
-        mProgressBar.setMax(100);
         mProgressBar.setProgress((int)percentage);
         Log.d("CREATE STATUS VARS", String.valueOf(creationProgress) + " " + String.valueOf(totalCreationTarget) + " " + String.valueOf((int) percentage));
         Log.d("CREATE STATUS FRAGMENT", "Progress is: " + String.valueOf(percentage));
