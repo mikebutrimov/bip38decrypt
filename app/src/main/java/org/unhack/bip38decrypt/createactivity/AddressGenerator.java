@@ -84,9 +84,9 @@ public class AddressGenerator implements Callable<ECKey> {
      * Logs progress every 1M attempts
      */
     private void logAttempts() {
-        if (attempts % 1000 == 0) {
-            Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
-                    NumberFormat.getNumberInstance(Locale.US).format(attempts));
+        if (attempts % 50 == 0) {
+            //Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
+            //        NumberFormat.getNumberInstance(Locale.US).format(attempts));
             Message mMsg = new Message();
             Bundle mBundle = new Bundle();
             mBundle.putLong("progress", attempts);

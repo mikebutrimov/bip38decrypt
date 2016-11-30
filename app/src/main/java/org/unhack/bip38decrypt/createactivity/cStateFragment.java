@@ -93,11 +93,12 @@ public class cStateFragment extends mFragment implements imFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createService.getworker().
+                createService.getworker().interrupt();
+
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });
-
-
         return view;
     }
 

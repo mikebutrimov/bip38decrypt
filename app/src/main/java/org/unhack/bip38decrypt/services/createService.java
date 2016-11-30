@@ -29,6 +29,8 @@ public class createService extends IntentService {
     private static ECKey createdKey;
     private static boolean isSet = false;
     public static Thread worker;
+    private static final int cores = Runtime.getRuntime().availableProcessors();
+    private static final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
     public createService() {
         super("createService");
     }
@@ -49,10 +51,13 @@ public class createService extends IntentService {
             }
 
             Log.d("CREATE SERVICE PHRASE", phrase);
-            worker = new Thread(new Runnable() {
+            worker = new Thread  (new Runnable() {
                 @Override
                 public void run() {
                     generateAddress(phrase);
+                }
+                public void clearExecPool(){
+                    execService.shutdownNow();
                 }
             });
             worker.start();
@@ -61,8 +66,6 @@ public class createService extends IntentService {
     }
 
     private static void generateAddress(final String targetPhrase) {
-        final int cores = Runtime.getRuntime().availableProcessors();
-        final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
         final long timeStart = System.nanoTime();
         for (int i = 0; i < cores; i++) {
             try {
