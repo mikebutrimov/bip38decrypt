@@ -77,7 +77,7 @@ public class cInputFragment extends mFragment implements imFragment {
         final EditText editText_vanity = (EditText) view.findViewById(R.id.editText_vanity);
         editText_vanity.addTextChangedListener(new TextWatcher() {
             void processtext(){
-                String pattern = editText_vanity.getText().toString();
+                String pattern = editText_vanity.getText().toString().trim();
                 String diff = "0";
                 pattern = "1" + pattern;
                 try {
