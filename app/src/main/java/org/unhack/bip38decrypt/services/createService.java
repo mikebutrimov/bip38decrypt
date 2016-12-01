@@ -2,6 +2,8 @@ package org.unhack.bip38decrypt.services;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 
 import com.google.common.util.concurrent.FutureCallback;
@@ -14,6 +16,7 @@ import net.bither.bitherj.crypto.ECKey;
 
 import org.unhack.bip38decrypt.Utils;
 import org.unhack.bip38decrypt.createactivity.AddressGenerator;
+import org.unhack.bip38decrypt.createactivity.cStateFragment;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -74,7 +77,9 @@ public class createService extends IntentService {
                         if (key.toAddress().startsWith(targetPhrase)) {
                             setCreatedKey(key);
                         }
+
                         execService.shutdownNow();
+                        
                     }
 
                     @Override
@@ -102,6 +107,11 @@ public class createService extends IntentService {
             createdKey = key;
             String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
             Log.d("GENERATE", lesText);
+            Message mKeyMsg = new Message();
+            Bundle mData = new Bundle();
+            mData.putString("address", key.toAddress());
+            mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
+            cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
         }
     }
     public static Thread getworker(){

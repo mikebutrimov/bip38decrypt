@@ -31,12 +31,24 @@ public class cStateFragment extends mFragment implements imFragment {
     private long creationProgress, totalCreationTarget;
     private int encryptionProgress, totalEncryptionTarget, wallets;
     private String password, title, vanity;
-    public static Handler onCreateProgressCreateHandler, onStateWorkerHandler;
+    public static Handler onCreateProgressCreateHandler, onStateWorkerHandler, onCreateKeyHandler;
     private int cores = Runtime.getRuntime().availableProcessors();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.create_step_progress, container, false);
+
+        onCreateKeyHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                try{
+                    Log.d("ON KEY HANDLER", "We have get a key, ok");
+                }
+                catch (Exception e){
+                    e.printStackTrace(); //need to remove all of this later
+
+                }
+            }
+        };
 
         onCreateProgressCreateHandler = new Handler(){
             public  void handleMessage(android.os.Message msg) {
@@ -95,7 +107,6 @@ public class cStateFragment extends mFragment implements imFragment {
             public void onClick(View v) {
                 createService.clearAllTasks();
                 createService.getworker().interrupt();
-
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });
@@ -109,8 +120,8 @@ public class cStateFragment extends mFragment implements imFragment {
         creationProgress = currProgress * cores;
         double percentage = creationProgress *100.0/ totalCreationTarget;
         mProgressBar.setProgress((int)percentage);
-        Log.d("CREATE STATUS VARS", String.valueOf(creationProgress) + " " + String.valueOf(totalCreationTarget) + " " + String.valueOf((int) percentage));
-        Log.d("CREATE STATUS FRAGMENT", "Progress is: " + String.valueOf(percentage));
+        //Log.d("CREATE STATUS VARS", String.valueOf(creationProgress) + " " + String.valueOf(totalCreationTarget) + " " + String.valueOf((int) percentage));
+        //Log.d("CREATE STATUS FRAGMENT", "Progress is: " + String.valueOf(percentage));
     }
 
     public void setEncryptionProgress(int currProgress){
