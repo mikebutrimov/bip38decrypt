@@ -99,6 +99,7 @@ public class cStateFragment extends mFragment implements imFragment {
             Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
             createIntent.putExtra("vanity", vanity);
             getContext().startService(createIntent);
+            Log.d("START CREATE", "Start create service");
         }
 
 

@@ -33,7 +33,7 @@ public class createService extends IntentService {
     private static boolean isSet = false;
     public static Thread worker;
     private static final int cores = Runtime.getRuntime().availableProcessors();
-    private static final ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
+    private static  ListeningExecutorService execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));;
     public createService() {
         super("createService");
     }
@@ -69,6 +69,9 @@ public class createService extends IntentService {
         final long timeStart = System.nanoTime();
         for (int i = 0; i < cores; i++) {
             try {
+                if (execService.isShutdown()) {
+                    execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
+                }
                 Callable<ECKey> callable = new AddressGenerator(targetPhrase);
                 ListenableFuture<ECKey> future = execService.submit(callable);
                 Futures.addCallback(future, new FutureCallback<ECKey>() {
@@ -78,8 +81,6 @@ public class createService extends IntentService {
                             setCreatedKey(key);
                         }
 
-                        execService.shutdownNow();
-                        
                     }
 
                     @Override
@@ -119,6 +120,11 @@ public class createService extends IntentService {
     }
 
     public static void clearAllTasks(){
-        execService.shutdownNow();
+        while (!execService.isShutdown()) {
+            execService.shutdownNow();
+        }
+        if (execService.isShutdown()){
+            Log.d("EXEC", "IS SHUTTED DOWN");
+        }
     }
 }
