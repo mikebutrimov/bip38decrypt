@@ -71,7 +71,9 @@ public class CreateActivity extends AppCompatActivity {
         registerReceiver(mSppedtestReciever, new IntentFilter(SPEEDTEST_FILTER));
         createSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
+
                 viewPager.setCurrentItem(msg.getData().getInt(TABNUMBER));
+                Log.d("SWIPE", "Swipe toggled " + msg.getData().toString());
             }
         };
 

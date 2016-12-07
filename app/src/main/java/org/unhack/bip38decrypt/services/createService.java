@@ -80,7 +80,6 @@ public class createService extends IntentService {
                         if (key.toAddress().startsWith(targetPhrase)) {
                             setCreatedKey(key);
                         }
-
                     }
 
                     @Override
@@ -113,6 +112,12 @@ public class createService extends IntentService {
             mData.putString("address", key.toAddress());
             mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
             cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
+            while (!execService.isShutdown()) {
+                execService.shutdownNow();
+            }
+            if (execService.isShutdown()){
+                Log.d("EXEC", "IS SHUTTED DOWN");
+            }
         }
     }
     public static Thread getworker(){

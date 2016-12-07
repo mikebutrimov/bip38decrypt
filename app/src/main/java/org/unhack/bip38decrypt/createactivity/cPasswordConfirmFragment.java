@@ -32,8 +32,8 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
 
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_confirm_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_confirm_password);
-        button_back = (Button) view.findViewById(R.id.button_create_back);
-        button_next = (Button) view.findViewById(R.id.button_create_next);
+        button_back = (Button) view.findViewById(R.id.button_create_confirm_back);
+        button_next = (Button) view.findViewById(R.id.button_create_confirm_next);
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

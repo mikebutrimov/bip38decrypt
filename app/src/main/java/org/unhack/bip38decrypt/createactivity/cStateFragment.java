@@ -37,6 +37,7 @@ public class cStateFragment extends mFragment implements imFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.create_step_progress, container, false);
+        Log.d("STATE FRG", "In create View");
 
         onCreateKeyHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
@@ -95,12 +96,13 @@ public class cStateFragment extends mFragment implements imFragment {
 
 
         //fire up intent services for wallets to create
-        for (int i = 0; i< wallets; i++){
+        /*for (int i = 0; i< wallets; i++){
             Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
             createIntent.putExtra("vanity", vanity);
             getContext().startService(createIntent);
             Log.d("START CREATE", "Start create service");
-        }
+        }*/
+
 
 
         button_cancel.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +116,15 @@ public class cStateFragment extends mFragment implements imFragment {
         return view;
     }
 
+
+    @Override
+    public void onStart(){
+        Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
+        createIntent.putExtra("vanity", vanity);
+        getContext().startService(createIntent);
+        Log.d("START CREATE", "Start create service");
+        super.onStart();
+    }
 
 
 

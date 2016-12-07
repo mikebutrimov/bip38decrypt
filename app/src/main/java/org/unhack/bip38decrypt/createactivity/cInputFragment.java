@@ -39,6 +39,7 @@ public class cInputFragment extends mFragment implements imFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("INPUT FRG", "CREATE");
         View view;
         view = inflater.inflate(R.layout.create_step_uinput, container, false);
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);
@@ -95,7 +96,7 @@ public class cInputFragment extends mFragment implements imFragment {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                processtext();
+                //processtext();
             }
 
             @Override
@@ -105,7 +106,7 @@ public class cInputFragment extends mFragment implements imFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                processtext();
+                //processtext();
             }
         });
 
