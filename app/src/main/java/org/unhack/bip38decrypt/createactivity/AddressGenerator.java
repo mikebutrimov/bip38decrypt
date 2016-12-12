@@ -70,13 +70,22 @@ public class AddressGenerator implements Callable<ECKey> {
      */
     @Override
     public ECKey call() throws Exception {
+        Log.d("Address Generator", "In Call" );
         ECKey key;
+        Log.d("Address Generator", "After create key" );
         do {
             key = ECKey.generateECKey(rnd);
             attempts++;
             logAttempts();
+            if (Thread.currentThread().isInterrupted()) {
+                Log.d("Address Generator", "In do. vars. isInterrupted:   " + String.valueOf(Thread.currentThread().isInterrupted()));
+            }
+            if (key.toAddress().startsWith(targetPhrase)){
+                Log.d("Address Generator", "startswith correct");
+            }
         } while (!(key.toAddress().startsWith(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
+        Log.d("Address Generator", "Before return" );
         return key;
     }
 

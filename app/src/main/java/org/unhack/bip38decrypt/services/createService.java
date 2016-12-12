@@ -93,6 +93,7 @@ public class createService extends IntentService {
             try {
                 Callable<ECKey> callable = new AddressGenerator(targetPhrase);
                 ListenableFuture<ECKey> future = execService.submit(callable);
+                Log.d ("IN POOL",  execService.toString() );
                 Futures.addCallback(future, new FutureCallback<ECKey>() {
                     @Override
                     public void onSuccess(ECKey key) {
@@ -114,25 +115,20 @@ public class createService extends IntentService {
         }
 
     }
-    private static synchronized boolean lockKey(){
-        boolean isLocked = isSet;
-        isSet = true;
-        return isLocked;
-    }
 
     private  void setCreatedKey(ECKey key){
-        if (!lockKey()){
-            createdKey = key;
-            String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
-            Log.d("GENERATE", lesText);
-            Message mKeyMsg = new Message();
-            Bundle mData = new Bundle();
-            mData.putString("address", key.toAddress());
-            mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
-            cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
-            Log.d("C Service w", " "+String.valueOf(generated_wallets)+ " " + String.valueOf(wallets));
-            generated_wallets++;
-        }
+        createdKey = key;
+        String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
+        Log.d("GENERATE", lesText);
+        Message mKeyMsg = new Message();
+        Bundle mData = new Bundle();
+        mData.putString("address", key.toAddress());
+        mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
+        cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
+        Log.d("C Service w", " "+String.valueOf(generated_wallets)+ " " + String.valueOf(wallets));
+        generated_wallets++;
+        clearAllTasks();
+        isSet = false;
     }
 
     public static void clearAllTasks(){
