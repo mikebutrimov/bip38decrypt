@@ -108,8 +108,9 @@ public class cStateFragment extends mFragment implements imFragment {
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("cSTATE FRG", "ON CANCEL");
+                Intent stopServiceIntent = new Intent(createService.STOP_SERVICE);
                 createService.clearAllTasks();
-                createService.getworker().interrupt();
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });
@@ -119,10 +120,10 @@ public class cStateFragment extends mFragment implements imFragment {
 
     @Override
     public void onStart(){
-        Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
+        /*Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
         createIntent.putExtra("vanity", vanity);
         getContext().startService(createIntent);
-        Log.d("START CREATE", "Start create service");
+        Log.d("START CREATE", "Start create service");*/
         super.onStart();
     }
 

@@ -136,7 +136,7 @@ public class Utils {
                 pattern_prefix = new BigDecimal(new BigInteger(Base58.decode(pattern_word)));
             }
             catch (Exception e){
-                Log.d("Zero?","yup, Zero");
+                //Log.d("Zero?","yup, Zero");
                 pattern_prefix = new BigDecimal(BigInteger.valueOf(0));
                 zeroPrefix = true;
             }
@@ -156,7 +156,7 @@ public class Utils {
                     buf_top = top;
                     bottom = pattern_prefix.multiply(BigDecimal.valueOf(Math.pow(58, n)));
                     top = bottom.add((BigDecimal.valueOf(Math.pow(58, n)))).subtract(BigDecimal.valueOf(1));
-                    Log.d("Numbers", bottom.toString() + " " + top.toString());
+                    //Log.d("Numbers", bottom.toString() + " " + top.toString());
                     if (buf_bottom.toBigInteger().bitLength() > (bin_len - 8)
                             && buf_bottom.toBigInteger().bitLength() <= bin_len
                             && buf_top.toBigInteger().bitLength() <= bin_len) {
@@ -171,11 +171,11 @@ public class Utils {
                     n = n + 1;
                 }
             }
-            Log.d("BUF TOP",buf_top.toString());
+            //Log.d("BUF TOP",buf_top.toString());
             buffer = buffer.divide(BigDecimal.valueOf(Math.pow(256,4)),1,BigDecimal.ROUND_UP);
             try {
                 String res = biggest_niumber.divide(buffer, 0, BigDecimal.ROUND_DOWN).toString();
-                Log.d("DIFF", res);
+                //Log.d("DIFF", res);
                 return res;
             }
             catch (ArithmeticException ae){

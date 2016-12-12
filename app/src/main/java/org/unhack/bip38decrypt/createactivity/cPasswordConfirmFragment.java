@@ -1,5 +1,6 @@
 package org.unhack.bip38decrypt.createactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.mfragments.imFragment;
 import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.createService;
 
 /**
  * Created by unhack on 11/25/16.
@@ -50,6 +52,10 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
                         Bundle mDataBundle = getArguments();
                         cStateFragment mcStateFragment = new cStateFragment();
                         mcStateFragment.setArguments(mDataBundle);
+                        Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
+                        createIntent.putExtra("vanity", mDataBundle.getString("vanity"));
+                        createIntent.putExtra("wallets", mDataBundle.getInt("wallets",1));
+                        getContext().startService(createIntent);
                         CreateActivity.createPagerAdapter.addFragment(mcStateFragment);
                         CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
                     }
