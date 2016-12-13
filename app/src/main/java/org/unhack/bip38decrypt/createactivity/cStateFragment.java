@@ -1,10 +1,8 @@
 package org.unhack.bip38decrypt.createactivity;
 
 import android.content.Intent;
-import android.hardware.camera2.TotalCaptureResult;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,38 +91,19 @@ public class cStateFragment extends mFragment implements imFragment {
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.create_progressBar);
         button_cancel = (Button) view.findViewById(R.id.button_cancel);
-
-
-        //fire up intent services for wallets to create
-        /*for (int i = 0; i< wallets; i++){
-            Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
-            createIntent.putExtra("vanity", vanity);
-            getContext().startService(createIntent);
-            Log.d("START CREATE", "Start create service");
-        }*/
-
-
-
         button_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("cSTATE FRG", "ON CANCEL");
                 Intent stopServiceIntent = new Intent(createService.STOP_SERVICE);
                 createService.clearAllTasks();
+                mProgressBar.setProgress(0);
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });
+
+        mProgressBar.setProgress(0);
         return view;
-    }
-
-
-    @Override
-    public void onStart(){
-        /*Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
-        createIntent.putExtra("vanity", vanity);
-        getContext().startService(createIntent);
-        Log.d("START CREATE", "Start create service");*/
-        super.onStart();
     }
 
 
@@ -133,8 +112,6 @@ public class cStateFragment extends mFragment implements imFragment {
         creationProgress = currProgress * cores;
         double percentage = creationProgress *100.0/ totalCreationTarget;
         mProgressBar.setProgress((int)percentage);
-        //Log.d("CREATE STATUS VARS", String.valueOf(creationProgress) + " " + String.valueOf(totalCreationTarget) + " " + String.valueOf((int) percentage));
-        //Log.d("CREATE STATUS FRAGMENT", "Progress is: " + String.valueOf(percentage));
     }
 
     public void setEncryptionProgress(int currProgress){

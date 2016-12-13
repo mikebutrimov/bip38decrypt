@@ -96,7 +96,6 @@ public class cInputFragment extends mFragment implements imFragment {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //processtext();
             }
 
             @Override
@@ -106,7 +105,6 @@ public class cInputFragment extends mFragment implements imFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //processtext();
             }
         });
 
@@ -126,23 +124,15 @@ public class cInputFragment extends mFragment implements imFragment {
                 mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
                 mCreateDataBundle.putString("title", editText_title.getText().toString());
                 mCreateDataBundle.putString("vanity", vanity);
+                int wallets = 1;
                 try {
-                    mCreateDataBundle.putInt("wallets", Integer.valueOf(editText_wallets2generate.getText().toString()));
-                    mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget);
-                    Log.d("CREATION PROGRESS:", String.valueOf(totalCreationTarget));
+                    wallets = Integer.valueOf(editText_wallets2generate.getText().toString());
                 }
                 catch (NumberFormatException nfe){
                     nfe.printStackTrace();
-                    mCreateDataBundle.putInt("wallets",1);
-                    try {
-                        mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget);
-                    }
-                    catch (NullPointerException npe){
-                        mCreateDataBundle.putLong("totalCreationTarget", 1);
-                    }
-                    Log.d("CREATION PROGRESS:", String.valueOf(totalCreationTarget));
                 }
-
+                mCreateDataBundle.putInt("wallets", wallets);
+                mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget*wallets);
                 cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
                 mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
                 CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);

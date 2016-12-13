@@ -1,10 +1,7 @@
 package org.unhack.bip38decrypt.services;
 
 import android.app.IntentService;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -21,41 +18,32 @@ import org.unhack.bip38decrypt.Utils;
 import org.unhack.bip38decrypt.createactivity.AddressGenerator;
 import org.unhack.bip38decrypt.createactivity.cStateFragment;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-
 
 public class createService extends IntentService {
     public final static String  STOP_SERVICE = "org.unhack.bip38decrypt.STOPSERVICE";
-    private static String phrase = "1";
-    private static String vanity = null;
-    private static ECKey createdKey;
-    private static boolean isSet = false;
-    private static int wallets = 1;
-    private static int generated_wallets = 0;
-    public static Thread worker;
+    private String mKeyPhrase = "1";
+    private ECKey mGeneratedKey;
+    private int wallets = 1;
+    private int generated_wallets = 0;
     private static final int cores = Runtime.getRuntime().availableProcessors();
-    private static  ListeningExecutorService execService = null;
+    private static ListeningExecutorService mExecutorService = null;
 
 
     public createService() {
         super("createService");
-        if (execService != null) {
-            while (!execService.isShutdown()) {
-                execService.shutdownNow();
-            }
-            if (execService.isShutdown()) {
-                Log.d("EXEC", "Was SHUTDOWNED IN ONCREATE");
+        //Clear executor if exists
+        if (mExecutorService != null) {
+            while (!mExecutorService.isShutdown()) {
+                mExecutorService.shutdownNow();
             }
         }
-        execService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
+        mExecutorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(cores));
     }
     @Override
     public void onCreate(){
@@ -64,13 +52,13 @@ public class createService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d("CREATE SERVICE", "onCreate reciever was set");
-        phrase = "1";
+        String vanity = null;
+        mKeyPhrase = "1";
         if (intent != null) {
             try {
                 vanity = intent.getStringExtra("vanity");
                 if (vanity != null) {
-                    phrase = vanity;
+                    mKeyPhrase = vanity;
                 }
                 wallets = intent.getIntExtra("wallets",1);
             }
@@ -78,46 +66,41 @@ public class createService extends IntentService {
                 //Oooops string was empty
                 vanity = null;
             }
-            startGeneration();
+            generateAddress(mKeyPhrase);
         }
     }
 
-    private  void startGeneration(){
-        Log.d("CREATE SERVICE PHRASE", phrase);
-        generateAddress(phrase);
+    private void submitTask(final String mPhrase){
+        try {
+            Callable<ECKey> callable = new AddressGenerator(mPhrase);
+            ListenableFuture<ECKey> future = mExecutorService.submit(callable);
+            Futures.addCallback(future, new FutureCallback<ECKey>() {
+                @Override
+                public void onSuccess(ECKey key) {
+                    if (key.toAddress().startsWith(mPhrase)) {
+                        setCreatedKey(key);
+                    }
+                }
+                @Override
+                @ParametersAreNonnullByDefault
+                public void onFailure(Throwable thrown) {
+                    Log.d("generator", thrown.getMessage());
+                }
+            });
+        }
+        catch (RejectedExecutionException ree){
+            ree.printStackTrace();
+        }
     }
 
     private  void generateAddress(final String targetPhrase) {
-        final long timeStart = System.nanoTime();
         for (int i = 0; i < cores; i++) {
-            try {
-                Callable<ECKey> callable = new AddressGenerator(targetPhrase);
-                ListenableFuture<ECKey> future = execService.submit(callable);
-                Log.d ("IN POOL",  execService.toString() );
-                Futures.addCallback(future, new FutureCallback<ECKey>() {
-                    @Override
-                    public void onSuccess(ECKey key) {
-                        if (key.toAddress().startsWith(targetPhrase)) {
-                            setCreatedKey(key);
-                        }
-                    }
-                    @Override
-                    @ParametersAreNonnullByDefault
-                    public void onFailure(Throwable thrown) {
-                        Log.d("generator", thrown.getMessage());
-                    }
-                });
-            }
-            catch (RejectedExecutionException ree){
-                ree.printStackTrace();
-                return;
-            }
+            submitTask(targetPhrase);
         }
-
     }
 
     private  void setCreatedKey(ECKey key){
-        createdKey = key;
+        mGeneratedKey = key;
         String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
         Log.d("GENERATE", lesText);
         Message mKeyMsg = new Message();
@@ -127,15 +110,19 @@ public class createService extends IntentService {
         cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
         Log.d("C Service w", " "+String.valueOf(generated_wallets)+ " " + String.valueOf(wallets));
         generated_wallets++;
-        clearAllTasks();
-        isSet = false;
+        if (generated_wallets < wallets){
+            submitTask(mKeyPhrase);
+        }
+        else {
+            clearAllTasks();
+        }
     }
 
     public static void clearAllTasks(){
-        while (!execService.isShutdown()) {
-            execService.shutdownNow();
+        while (!mExecutorService.isShutdown()) {
+            mExecutorService.shutdownNow();
         }
-        if (execService.isShutdown()){
+        if (mExecutorService.isShutdown()){
             Log.d("EXEC", "IS SHUTTED DOWN");
         }
     }

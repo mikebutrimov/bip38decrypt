@@ -70,22 +70,13 @@ public class AddressGenerator implements Callable<ECKey> {
      */
     @Override
     public ECKey call() throws Exception {
-        Log.d("Address Generator", "In Call" );
         ECKey key;
-        Log.d("Address Generator", "After create key" );
         do {
             key = ECKey.generateECKey(rnd);
             attempts++;
             logAttempts();
-            if (Thread.currentThread().isInterrupted()) {
-                Log.d("Address Generator", "In do. vars. isInterrupted:   " + String.valueOf(Thread.currentThread().isInterrupted()));
-            }
-            if (key.toAddress().startsWith(targetPhrase)){
-                Log.d("Address Generator", "startswith correct");
-            }
         } while (!(key.toAddress().startsWith(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
-        Log.d("Address Generator", "Before return" );
         return key;
     }
 
@@ -93,9 +84,9 @@ public class AddressGenerator implements Callable<ECKey> {
      * Logs progress every 1M attempts
      */
     private void logAttempts() {
-        if (attempts % 1000 == 0) {
-            Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
-                    NumberFormat.getNumberInstance(Locale.US).format(attempts));
+        if (attempts % 500 == 0) {
+            //Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
+            //        NumberFormat.getNumberInstance(Locale.US).format(attempts));
             Message mMsg = new Message();
             Bundle mBundle = new Bundle();
             mBundle.putLong("progress", attempts);
@@ -103,11 +94,4 @@ public class AddressGenerator implements Callable<ECKey> {
             cStateFragment.onCreateProgressCreateHandler.sendMessage(mMsg);
         }
     }
-
-    /**
-     * Verifies that the requested phrase represents a valid bitcoin address substring
-     *
-     * @param substring the requested phrase
-     * @return true if the requested phrase is a valid bitcoin address substring
-     */
 }
