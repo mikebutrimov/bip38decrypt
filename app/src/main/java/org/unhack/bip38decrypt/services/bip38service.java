@@ -14,6 +14,8 @@ import org.unhack.bip38decrypt.MainActivity;
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
 
+import java.util.HashMap;
+
 public class bip38service extends IntentService {
     private String res,wallet,address;
     public static  boolean IAM = false;
@@ -80,8 +82,9 @@ public class bip38service extends IntentService {
                     if (res != null) {
                         Log.d("Service ", "Before Handler");
                         Intent resIntent = new Intent(MainActivity.INTENT_FILTER);
-                        resIntent.putExtra("result",res);
-                        resIntent.putExtra("address",address);
+                        HashMap<String,String> mWallet = new HashMap<>();
+                        mWallet.put(address,res);
+                        resIntent.putExtra("hashmapWallets",mWallet);
                         sendBroadcast(resIntent);
                         Log.d("Service ", "After Handler");
                     }

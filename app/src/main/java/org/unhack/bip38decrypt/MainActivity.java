@@ -26,6 +26,12 @@ import android.widget.Toast;
 import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
 import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
 
+import java.io.NotSerializableException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 136;
@@ -47,15 +53,25 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("In RECIEVE","Bonjour epta");
-            Log.d("MAIN F Rec",intent.getStringExtra("result"));
-            Message msgCreationFragment = new Message();
-            Bundle args = new Bundle();
-            args.putString("addr",intent.getStringExtra("address"));
-            args.putString("res",intent.getStringExtra("result"));
-            QrFragment mQrFragment = new QrFragment();
-            mQrFragment.setArguments(args);
-            pagerAdapter.addFragment(mQrFragment);
+            HashMap<String,String> mWallets = null;
+            try {
+                mWallets = (HashMap<String, String>) intent.getSerializableExtra("hashmapWallets");
+            }
+            catch (Exception nse){
+                nse.printStackTrace();
+            }
+            if (mWallets != null){
+                for (Map.Entry<String,String> record : mWallets.entrySet()){
+                    Message msgCreationFragment = new Message();
+                    Bundle args = new Bundle();
+                    args.putString("addr",record.getKey());
+                    args.putString("res",record.getValue());
+                    QrFragment mQrFragment = new QrFragment();
+                    mQrFragment.setArguments(args);
+                    pagerAdapter.addFragment(mQrFragment);
+                }
+
+            }
             Intent dFinishIntent = new Intent(DecodeActivity.DECODE_INTENT_FILTER);
             sendBroadcast(dFinishIntent);
             pagerAdapter.NavigateToTab(pagerAdapter.getCount());
@@ -87,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 Message msgCreationFragment = new Message();
                 msgCreationFragment.copyFrom(msg);
                 Bundle args = msg.getData();
-                //StartCreationFragment.startCreationFragmentHandler.sendMessage(msgCreationFragment);
                 QrFragment mQrFragment = new QrFragment();
                 mQrFragment.setArguments(args);
                 pagerAdapter.addFragment(mQrFragment);
@@ -106,13 +121,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-
         setContentView(R.layout.activity_main);
         initPaging();
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,31 +151,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.container);
         if (viewPager != null) {
             viewPager.setAdapter(pagerAdapter);
-        }
-    }
-
-
-    public void setPasswdVisible(View v){
-        CheckBox setPasswdVisible = (CheckBox) mDialog.findViewById(R.id.checkBox_showPassword);
-        EditText ePassword1 = (EditText) mDialog.findViewById(R.id.editText_password1);
-        EditText ePassword2 = (EditText) mDialog.findViewById(R.id.editText2_password2);
-        if (setPasswdVisible != null) {
-            if (!setPasswdVisible.isChecked()){
-                if (ePassword1 != null) {
-                    ePassword1.setTransformationMethod(new PasswordTransformationMethod());
-                }
-                if (ePassword2 != null) {
-                    ePassword2.setTransformationMethod(new PasswordTransformationMethod());
-                }
-            }
-            else {
-                if (ePassword1 != null) {
-                    ePassword1.setTransformationMethod(null);
-                }
-                if (ePassword2 != null) {
-                    ePassword2.setTransformationMethod(null);
-                }
-            }
         }
     }
 
