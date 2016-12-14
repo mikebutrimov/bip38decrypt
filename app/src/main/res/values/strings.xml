@@ -22,6 +22,8 @@
     <string name="difficulty_easy">Easy</string>
     <string name="address_will_be">Address will be like: \n</string>
     <string name="warmingup">Warming up your processors</string>
+    <string name="nonbase58">Non Base58 character</string>
+    <string name="generating">Generating</string>
 
     <string name="button_next">Next</string>
     <string name="button_back">Back</string>

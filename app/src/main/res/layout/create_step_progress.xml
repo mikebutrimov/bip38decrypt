@@ -14,16 +14,13 @@
         android:id="@+id/create_progressBar"
         android:layout_weight="0.7"
         android:indeterminate="false"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        android:background="@drawable/circle_shape"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:max="100"/>
+       />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/textView_create_progress"
+            android:id="@+id/textView_progress"
             android:layout_weight="0.2"
             android:gravity="center|center_horizontal"
             android:layout_centerVertical="true"

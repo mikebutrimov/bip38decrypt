@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
@@ -89,13 +90,20 @@ public class cInputFragment extends mFragment implements imFragment {
                     diff = "0";
                 }
                 vanity = pattern;
-                totalCreationTarget = Long.valueOf(diff);
-                textView_difficulty.setText(diff);
+                if (diff != null) {
+                    totalCreationTarget = Long.valueOf(diff);
+                    textView_difficulty.setText(diff);
+                }
+                else {
+                    textView_difficulty.setText(getString(R.string.nonbase58));
+                }
+
                 textView_addresswillbelike.setText(getText(R.string.address_will_be) + pattern);
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                processtext();
             }
 
             @Override
@@ -105,6 +113,7 @@ public class cInputFragment extends mFragment implements imFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                processtext();
             }
         });
 
@@ -120,23 +129,28 @@ public class cInputFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle mCreateDataBundle = new Bundle();
-                mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
-                mCreateDataBundle.putString("title", editText_title.getText().toString());
-                mCreateDataBundle.putString("vanity", vanity);
-                int wallets = 1;
-                try {
-                    wallets = Integer.valueOf(editText_wallets2generate.getText().toString());
+                if (totalCreationTarget == null && vanity!=null){
+                    Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
                 }
-                catch (NumberFormatException nfe){
-                    nfe.printStackTrace();
+                else {
+                    totalCreationTarget = Long.valueOf(1);
+                    Bundle mCreateDataBundle = new Bundle();
+                    mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
+                    mCreateDataBundle.putString("title", editText_title.getText().toString());
+                    mCreateDataBundle.putString("vanity", vanity);
+                    int wallets = 1;
+                    try {
+                        wallets = Integer.valueOf(editText_wallets2generate.getText().toString());
+                    } catch (NumberFormatException nfe) {
+                        nfe.printStackTrace();
+                    }
+                    mCreateDataBundle.putInt("wallets", wallets);
+                    mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget * wallets);
+                    cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
+                    mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
+                    CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
+                    CreateActivity.createPagerAdapter.CoolNavigateToTab(1, CreateActivity.TABNUMBER, CreateActivity.createSwipeHandler, false);
                 }
-                mCreateDataBundle.putInt("wallets", wallets);
-                mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget*wallets);
-                cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
-                mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
-                CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
-                CreateActivity.createPagerAdapter.CoolNavigateToTab(1,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
             }
         });
         return view;

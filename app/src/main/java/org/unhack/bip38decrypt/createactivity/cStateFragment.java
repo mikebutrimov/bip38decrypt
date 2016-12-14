@@ -25,7 +25,7 @@ public class cStateFragment extends mFragment implements imFragment {
     private Button button_cancel;
     private  ProgressBar mProgressBar;
     private Bundle mArgs;
-    private TextView mTextViewStatus;
+    private TextView mTextViewProgress;
     private long creationProgress, totalCreationTarget;
     private int encryptionProgress, totalEncryptionTarget, wallets;
     private String password, title, vanity;
@@ -41,6 +41,11 @@ public class cStateFragment extends mFragment implements imFragment {
             public void handleMessage(android.os.Message msg){
                 try{
                     Log.d("ON KEY HANDLER", "We have get a key, ok");
+                    Bundle mData =  msg.getData();
+                    String generated_wallets = String.valueOf(mData.getInt("generated_wallets"));
+                    String wallets = String.valueOf(mData.getInt("wallets"));
+                    mTextViewProgress.setText(getString(R.string.generating) + "\n" + generated_wallets + "/" + wallets);
+
                 }
                 catch (Exception e){
                     e.printStackTrace(); //need to remove all of this later
@@ -88,7 +93,7 @@ public class cStateFragment extends mFragment implements imFragment {
         catch (Exception e){
             e.printStackTrace();
         }
-
+        mTextViewProgress = (TextView) view.findViewById(R.id.textView_progress);
         mProgressBar = (ProgressBar) view.findViewById(R.id.create_progressBar);
         button_cancel = (Button) view.findViewById(R.id.button_cancel);
         button_cancel.setOnClickListener(new View.OnClickListener() {

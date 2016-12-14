@@ -115,8 +115,12 @@ public class createService extends IntentService {
         Bundle mData = new Bundle();
         mData.putString("address", key.toAddress());
         mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
+        mData.putInt("generated_wallets",generated_wallets);
+        mData.putInt("wallets",wallets);
+        mKeyMsg.setData(mData);
         cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
         Log.d("C Service w", " " + String.valueOf(generated_wallets) + " " + String.valueOf(wallets));
+
         if (generated_wallets < wallets) {
             submitTask(mKeyPhrase);
         } else {

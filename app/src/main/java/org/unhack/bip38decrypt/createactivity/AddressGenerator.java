@@ -74,7 +74,7 @@ public class AddressGenerator implements Callable<ECKey> {
         do {
             key = ECKey.generateECKey(rnd);
             attempts++;
-            logAttempts();
+            //logAttempts();
         } while (!(key.toAddress().startsWith(targetPhrase)) &&
                 !Thread.currentThread().isInterrupted());
         return key;
@@ -85,13 +85,13 @@ public class AddressGenerator implements Callable<ECKey> {
      */
     private void logAttempts() {
         if (attempts % 1000 == 0) {
-            Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
-                    NumberFormat.getNumberInstance(Locale.US).format(attempts));
-            Message mMsg = new Message();
-            Bundle mBundle = new Bundle();
-            mBundle.putLong("progress", attempts);
-            mMsg.setData(mBundle);
-            cStateFragment.onCreateProgressCreateHandler.sendMessage(mMsg);
+            //Log.d("Thread ", Thread.currentThread().getName() + " is still working, # of attempts: " +
+            //        NumberFormat.getNumberInstance(Locale.US).format(attempts));
+            //Message mMsg = new Message();
+            //Bundle mBundle = new Bundle();
+            //mBundle.putLong("progress", attempts);
+            //mMsg.setData(mBundle);
+            //cStateFragment.onCreateProgressCreateHandler.sendMessage(mMsg);
         }
     }
 }
