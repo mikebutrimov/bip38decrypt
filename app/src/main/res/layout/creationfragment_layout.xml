@@ -62,4 +62,5 @@
             android:id="@+id/progressBar2"
             android:indeterminate="false" />
     </LinearLayout>
+
 </RelativeLayout>

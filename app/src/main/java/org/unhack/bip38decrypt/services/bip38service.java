@@ -32,7 +32,6 @@ public class bip38service extends IntentService {
         final String password = intent.getStringExtra("password");
         final String password2 = intent.getStringExtra("password2");
         final boolean needReEncrypt = intent.getBooleanExtra("reencrypt", false);
-
         HashMap<String, String> mWalletsToEncrypt = null;
         mWalletsToEncrypt = (HashMap<String, String>) intent.getSerializableExtra("hashMapWallets");
         if (mWalletsToEncrypt != null) {
@@ -40,6 +39,7 @@ public class bip38service extends IntentService {
             if (password != null) {
                 if (!password.isEmpty()) {
                     try {
+                        Log.d("BIP SERVICE", "Stage 2");
                         for (Map.Entry<String, String> mEntry : mWalletsToEncrypt.entrySet()) {
                             DumpedPrivateKey dumpedPrivateKey = new DumpedPrivateKey(mEntry.getValue());
                             ECKey ecKey = dumpedPrivateKey.getKey();
@@ -50,6 +50,7 @@ public class bip38service extends IntentService {
                                 e.printStackTrace();
                             }
                             res = Bip38.encryptNoEcMultiply(password, res);
+                            Log.d("BIP38 RES", res);
                             mEntry.setValue(res);
 
                         }
@@ -62,6 +63,7 @@ public class bip38service extends IntentService {
             resIntent.putExtra("hashmapWallets", mWalletsToEncrypt);
             sendBroadcast(resIntent);
             Log.d("Service ", "After miltiple encryption");
+            IAM = false;
         } else {
             try {
                 worker = new Thread(new Runnable() {

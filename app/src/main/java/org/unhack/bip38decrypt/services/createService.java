@@ -124,6 +124,7 @@ public class createService extends IntentService {
             clearAllTasks();
             //force bip38 service to service
             Intent encryptIntent = new Intent(getApplicationContext(), bip38service.class);
+            Log.d("CREATE PASSWORD", password);
             encryptIntent.putExtra("password", password);
             encryptIntent.putExtra("hashMapWallets", mWallets);
             startService(encryptIntent);
