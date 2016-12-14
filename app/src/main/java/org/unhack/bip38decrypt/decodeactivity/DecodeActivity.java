@@ -78,9 +78,9 @@ public class DecodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_decode);
-        registerReceiver(mFinishReciever,new IntentFilter(this.DECODE_INTENT_FILTER));
-        registerReceiver(mErrorReciever,new IntentFilter(this.DECODE_INTENT_ERROR));
-        registerReceiver(mStateReciever,new IntentFilter(this.DECODE_STATE_FILTER));
+        registerReceiver(mFinishReciever,new IntentFilter(DECODE_INTENT_FILTER));
+        registerReceiver(mErrorReciever,new IntentFilter(DECODE_INTENT_ERROR));
+        registerReceiver(mStateReciever,new IntentFilter(DECODE_STATE_FILTER));
         //This handler is used to swipe tabs
         decodeSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {

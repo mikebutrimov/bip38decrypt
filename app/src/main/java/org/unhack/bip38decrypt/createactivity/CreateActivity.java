@@ -49,6 +49,7 @@ import java.util.List;
 
 public class CreateActivity extends AppCompatActivity {
     public static final String TABNUMBER = "tab_number";
+    public static final String CREATE_INTENT_FILTER = "CREATEFINISH";
     public static MixedPagerAdapter createPagerAdapter;
     public static Handler createSwipeHandler,createErrorHandler;
     private NonSwipeableViewPager viewPager;
@@ -65,10 +66,19 @@ public class CreateActivity extends AppCompatActivity {
         }
     };
 
+    private BroadcastReceiver mFinishReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registerReceiver(mSppedtestReciever, new IntentFilter(SPEEDTEST_FILTER));
+        registerReceiver(mFinishReciever, new IntentFilter(CREATE_INTENT_FILTER));
         createSwipeHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
 
@@ -118,5 +128,6 @@ public class CreateActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mSppedtestReciever);
+        unregisterReceiver(mFinishReciever);
     }
 }

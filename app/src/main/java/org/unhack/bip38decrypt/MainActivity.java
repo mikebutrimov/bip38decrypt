@@ -23,7 +23,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
+import org.unhack.bip38decrypt.createactivity.CreateActivity;
 import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
 
 import java.io.NotSerializableException;
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
             Intent dFinishIntent = new Intent(DecodeActivity.DECODE_INTENT_FILTER);
+            Intent cFinishIntent = new Intent(CreateActivity.CREATE_INTENT_FILTER);
+            sendBroadcast(cFinishIntent);
             sendBroadcast(dFinishIntent);
             pagerAdapter.NavigateToTab(pagerAdapter.getCount());
         }

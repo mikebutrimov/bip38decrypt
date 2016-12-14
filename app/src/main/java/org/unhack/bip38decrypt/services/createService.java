@@ -14,13 +14,16 @@ import com.google.common.util.concurrent.MoreExecutors;
 
 import net.bither.bitherj.crypto.ECKey;
 
+import org.unhack.bip38decrypt.MainActivity;
 import org.unhack.bip38decrypt.Utils;
 import org.unhack.bip38decrypt.createactivity.AddressGenerator;
 import org.unhack.bip38decrypt.createactivity.cStateFragment;
 
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -29,11 +32,12 @@ public class createService extends IntentService {
     public final static String  STOP_SERVICE = "org.unhack.bip38decrypt.STOPSERVICE";
     private String mKeyPhrase = "1";
     private ECKey mGeneratedKey;
+    private String password = null;
     private int wallets = 1;
-    private int generated_wallets = 0;
+    private volatile int  generated_wallets = 0;
     private static final int cores = Runtime.getRuntime().availableProcessors();
     private static ListeningExecutorService mExecutorService = null;
-
+    private HashMap<String,String> mWallets = new HashMap<>();
 
     public createService() {
         super("createService");
@@ -52,6 +56,7 @@ public class createService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        password = intent.getStringExtra("password");
         String vanity = null;
         mKeyPhrase = "1";
         if (intent != null) {
@@ -93,35 +98,44 @@ public class createService extends IntentService {
         }
     }
 
-    private  void generateAddress(final String targetPhrase) {
+    private   void generateAddress(final String targetPhrase) {
         for (int i = 0; i < cores; i++) {
             submitTask(targetPhrase);
         }
     }
 
-    private  void setCreatedKey(ECKey key){
+    private synchronized void setCreatedKey(ECKey key) {
         mGeneratedKey = key;
-        String lesText = "Address: " + key.toAddress() + "Private Key: " + Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
+        String mWIFKey = Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
+        String lesText = "Address: " + key.toAddress() + "Private Key: " + mWIFKey;
         Log.d("GENERATE", lesText);
+        mWallets.put(key.toAddress(), mWIFKey);
+        generated_wallets++;
         Message mKeyMsg = new Message();
         Bundle mData = new Bundle();
         mData.putString("address", key.toAddress());
         mData.putString("privatekey", Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes()));
         cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
-        Log.d("C Service w", " "+String.valueOf(generated_wallets)+ " " + String.valueOf(wallets));
-        generated_wallets++;
-        if (generated_wallets < wallets){
+        Log.d("C Service w", " " + String.valueOf(generated_wallets) + " " + String.valueOf(wallets));
+        if (generated_wallets < wallets) {
             submitTask(mKeyPhrase);
-        }
-        else {
+        } else {
+            Log.d("ELSE", "!!!!!!!!!!!!");
             clearAllTasks();
+            //force bip38 service to service
+            Intent encryptIntent = new Intent(getApplicationContext(), bip38service.class);
+            encryptIntent.putExtra("password", password);
+            encryptIntent.putExtra("hashMapWallets", mWallets);
+            startService(encryptIntent);
         }
     }
+
+
 
     public static void clearAllTasks(){
         while (!mExecutorService.isShutdown()) {
             mExecutorService.shutdownNow();
-        }
+            }
         if (mExecutorService.isShutdown()){
             Log.d("EXEC", "IS SHUTTED DOWN");
         }
