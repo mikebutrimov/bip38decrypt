@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.mfragments.imFragment;
 import org.unhack.bip38decrypt.mfragments.mFragment;
+import org.unhack.bip38decrypt.services.bip38service;
 import org.unhack.bip38decrypt.services.createService;
 
 /**
@@ -29,7 +30,7 @@ public class cStateFragment extends mFragment implements imFragment {
     private long creationProgress, totalCreationTarget;
     private int encryptionProgress, totalEncryptionTarget, wallets;
     private String password, title, vanity;
-    public static Handler onCreateProgressCreateHandler, onStateWorkerHandler, onCreateKeyHandler;
+    public static Handler onCreateProgressCreateHandler, onStateWorkerHandler, onCreateKeyHandler, onEncryptKeyHandler;
     private int cores = Runtime.getRuntime().availableProcessors();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +60,28 @@ public class cStateFragment extends mFragment implements imFragment {
                 }
             }
         };
+
+        onEncryptKeyHandler = new Handler(){
+            public void handleMessage(android.os.Message msg){
+                try{
+                    Bundle mData =  msg.getData();
+                    int encrypted_wallets = mData.getInt("encrypted_wallets");
+                    int wallets = mData.getInt("wallets");
+                    if (encrypted_wallets < wallets) {
+                        mTextViewProgress.setText(getString(R.string.encrypting) + "\n" + encrypted_wallets + "/" + wallets);
+                    }
+                    else {
+                        mTextViewProgress.setText(getString(R.string.encrypting) + "\n" + wallets + "/" + wallets);
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace(); //need to remove all of this later
+
+                }
+            }
+        };
+
+
 
         onCreateProgressCreateHandler = new Handler(){
             public  void handleMessage(android.os.Message msg) {
@@ -109,6 +132,10 @@ public class cStateFragment extends mFragment implements imFragment {
                 Intent stopServiceIntent = new Intent(createService.STOP_SERVICE);
                 createService.clearAllTasks();
                 mProgressBar.setProgress(0);
+                bip38service.getWorker().interrupt();
+                if (bip38service.getWorker().isInterrupted()){
+                    Log.d("DestroyActivity","thread was interrupted");
+                }
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });

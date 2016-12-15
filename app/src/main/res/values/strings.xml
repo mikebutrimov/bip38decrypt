@@ -24,6 +24,7 @@
     <string name="warmingup">Warming up your processors</string>
     <string name="nonbase58">Non Base58 character</string>
     <string name="generating">Generating</string>
+    <string name="encrypting">Encrypting</string>
     <string name="clickBackToExit">Please click BACK again to exit</string>
 
     <string name="button_next">Next</string>

@@ -62,7 +62,12 @@ public class CreateActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             int speed = intent.getIntExtra("speed",0);
             textView_performance = (TextView) findViewById(R.id.textView_performance);
-            textView_performance.setText( String.format("Cores available: "+String.valueOf(cores)+ "\nAddresses per second: %d",speed));
+            try {
+                textView_performance.setText(String.format("Cores available: " + String.valueOf(cores) + "\nAddresses per second: %d", speed));
+            }
+            catch (RuntimeException re){
+                re.printStackTrace();
+            }
         }
     };
 
