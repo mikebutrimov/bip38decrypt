@@ -84,7 +84,12 @@ public class cStateFragment extends mFragment implements imFragment {
                 Intent stopServiceIntent = new Intent(createService.STOP_SERVICE);
                 createService.clearAllTasks();
                 mProgressBar.setProgress(0);
-                bip38service.getWorker().interrupt();
+                try {
+                    bip38service.getWorker().interrupt();
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
                 if (bip38service.getWorker().isInterrupted()){
                     Log.d("CreateActivity","thread was interrupted");
                 }

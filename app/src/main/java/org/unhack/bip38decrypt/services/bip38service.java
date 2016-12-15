@@ -79,7 +79,7 @@ public class bip38service extends IntentService {
                     }
                 }
             });
-            worker.setPriority(Thread.MAX_PRIORITY);
+            worker.setPriority(Thread.NORM_PRIORITY);
             worker.start();
 
 
@@ -135,7 +135,7 @@ public class bip38service extends IntentService {
                         bip38serviceIsRunning = false;
                     }
                 });
-                worker.setPriority(Thread.MAX_PRIORITY);
+                worker.setPriority(Thread.NORM_PRIORITY);
                 worker.start();
             } catch (Exception e) {
                 e.printStackTrace();

@@ -41,7 +41,6 @@ public class cInputFragment extends mFragment implements imFragment {
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_create_password);
         editText_wallets2generate = (EditText) view.findViewById(R.id.editText_wallets2generate);
-        editText_title = (EditText) view.findViewById(R.id.editText_walletname);
         button_inc_wallets = (Button) view.findViewById(R.id.button_inc_wallets);
         button_dec_wallets = (Button) view.findViewById(R.id.button_dec_wallets);
         button_back = (Button) view.findViewById(R.id.button_create_back);
@@ -131,7 +130,6 @@ public class cInputFragment extends mFragment implements imFragment {
                     totalCreationTarget = Long.valueOf(1);
                     Bundle mCreateDataBundle = new Bundle();
                     mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
-                    mCreateDataBundle.putString("title", editText_title.getText().toString());
                     mCreateDataBundle.putString("vanity", vanity);
                     int wallets = 1;
                     try {
