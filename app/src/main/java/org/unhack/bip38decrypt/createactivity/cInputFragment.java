@@ -131,10 +131,8 @@ public class cInputFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vanity != null) {
-                    if (!Utils.isValidBTCAddressSubstring(vanity)) {
-                        Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
-                    }
+                if (vanity != null && !Utils.isValidBTCAddressSubstring(vanity)) {
+                    Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     totalCreationTarget = Long.valueOf(1);

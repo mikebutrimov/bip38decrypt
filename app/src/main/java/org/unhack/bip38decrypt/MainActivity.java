@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TABNUMBER = "tab_number";
     public AlertDialog.Builder mDialogBuilder;
     public AlertDialog mDialog;
+    boolean doubleBackToExitPressedOnce = false;
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
@@ -157,6 +158,27 @@ public class MainActivity extends AppCompatActivity {
             viewPager.setAdapter(pagerAdapter);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        MainActivity.pagerAdapter.NavigateToTab(0);
+        Toast.makeText(this, getString(R.string.clickBackToExit), Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
+
+
 
     @Override
     public void onResume(){
