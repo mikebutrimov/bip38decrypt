@@ -42,9 +42,15 @@ public class cStateFragment extends mFragment implements imFragment {
                 try{
                     Log.d("ON KEY HANDLER", "We have get a key, ok");
                     Bundle mData =  msg.getData();
-                    String generated_wallets = String.valueOf(mData.getInt("generated_wallets"));
-                    String wallets = String.valueOf(mData.getInt("wallets"));
-                    mTextViewProgress.setText(getString(R.string.generating) + "\n" + generated_wallets + "/" + wallets);
+                    int generated_wallets = mData.getInt("generated_wallets");
+                    int wallets = mData.getInt("wallets");
+                    if (generated_wallets < wallets) {
+                        mTextViewProgress.setText(getString(R.string.generating) + "\n" + generated_wallets + "/" + wallets);
+                    }
+                    else {
+                        mTextViewProgress.setText(getString(R.string.generating) + "\n" + wallets + "/" + wallets);
+                    }
+
 
                 }
                 catch (Exception e){

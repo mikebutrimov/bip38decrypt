@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.bither.bitherj.crypto.bip38.Bip38Util;
+
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
 import org.unhack.bip38decrypt.mfragments.imFragment;
@@ -90,7 +92,7 @@ public class cInputFragment extends mFragment implements imFragment {
                     diff = "0";
                 }
                 vanity = pattern;
-                if (diff != null) {
+                if (diff != null && Utils.isValidBTCAddressSubstring(pattern)) {
                     totalCreationTarget = Long.valueOf(diff);
                     textView_difficulty.setText(diff);
                 }
@@ -129,8 +131,10 @@ public class cInputFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (totalCreationTarget == null && vanity!=null){
-                    Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
+                if (vanity != null) {
+                    if (!Utils.isValidBTCAddressSubstring(vanity)) {
+                        Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     totalCreationTarget = Long.valueOf(1);

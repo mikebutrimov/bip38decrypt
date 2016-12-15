@@ -37,7 +37,9 @@ public class createService extends IntentService {
     private volatile int  generated_wallets = 0;
     private static final int cores = Runtime.getRuntime().availableProcessors();
     private static ListeningExecutorService mExecutorService = null;
-    private HashMap<String,String> mWallets = new HashMap<>();
+    private volatile HashMap<String,String> mWallets = new HashMap<>();
+    private boolean isSet = false;
+    private volatile boolean isFired = false;
 
     public createService() {
         super("createService");
@@ -105,11 +107,15 @@ public class createService extends IntentService {
     }
 
     private synchronized void setCreatedKey(ECKey key) {
+        while (!getLock());
         mGeneratedKey = key;
         String mWIFKey = Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
         String lesText = "Address: " + key.toAddress() + "Private Key: " + mWIFKey;
         Log.d("GENERATE", lesText);
-        mWallets.put(key.toAddress(), mWIFKey);
+        if (mWallets.size() < wallets) {
+            mWallets.put(key.toAddress(), mWIFKey);
+        }
+        Log.d("CREATE ", "SIZE OF mWAllets:  " + mWallets.size());
         generated_wallets++;
         Message mKeyMsg = new Message();
         Bundle mData = new Bundle();
@@ -127,12 +133,16 @@ public class createService extends IntentService {
             Log.d("ELSE", "!!!!!!!!!!!!");
             clearAllTasks();
             //force bip38 service to service
-            Intent encryptIntent = new Intent(getApplicationContext(), bip38service.class);
-            Log.d("CREATE PASSWORD", password);
-            encryptIntent.putExtra("password", password);
-            encryptIntent.putExtra("hashMapWallets", mWallets);
-            startService(encryptIntent);
+            if (!isFired) {
+                Intent encryptIntent = new Intent(getApplicationContext(), bip38service.class);
+                Log.d("CREATE PASSWORD", password);
+                encryptIntent.putExtra("password", password);
+                encryptIntent.putExtra("hashMapWallets", mWallets);
+                startService(encryptIntent);
+                isFired = true;
+            }
         }
+        releaseLock();
     }
 
 
@@ -144,6 +154,15 @@ public class createService extends IntentService {
         if (mExecutorService.isShutdown()){
             Log.d("EXEC", "IS SHUTTED DOWN");
         }
+    }
+
+    private synchronized boolean getLock(){
+        boolean isLocked = isSet;
+        isSet = true;
+        return isLocked;
+    }
+    private synchronized void releaseLock(){
+        isSet = false;
     }
 
 }
