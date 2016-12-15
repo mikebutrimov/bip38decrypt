@@ -31,7 +31,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class createService extends IntentService {
     public final static String  STOP_SERVICE = "org.unhack.bip38decrypt.STOPSERVICE";
     private String mKeyPhrase = "1";
-    private ECKey mGeneratedKey;
     private String password = null;
     private int wallets = 1;
     private volatile int  generated_wallets = 0;
@@ -61,20 +60,18 @@ public class createService extends IntentService {
         password = intent.getStringExtra("password");
         String vanity = null;
         mKeyPhrase = "1";
-        if (intent != null) {
-            try {
-                vanity = intent.getStringExtra("vanity");
-                if (vanity != null) {
-                    mKeyPhrase = vanity;
-                }
-                wallets = intent.getIntExtra("wallets",1);
+        try {
+            vanity = intent.getStringExtra("vanity");
+            if (vanity != null) {
+                mKeyPhrase = vanity;
             }
-            catch (NullPointerException e){
-                //Oooops string was empty
-                vanity = null;
-            }
-            generateAddress(mKeyPhrase);
+            wallets = intent.getIntExtra("wallets",1);
         }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+            generateAddress(mKeyPhrase);
+
     }
 
     private void submitTask(final String mPhrase){
@@ -108,14 +105,11 @@ public class createService extends IntentService {
 
     private synchronized void setCreatedKey(ECKey key) {
         while (!getLock());
-        mGeneratedKey = key;
         String mWIFKey = Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
         String lesText = "Address: " + key.toAddress() + "Private Key: " + mWIFKey;
-        Log.d("GENERATE", lesText);
         if (mWallets.size() < wallets) {
             mWallets.put(key.toAddress(), mWIFKey);
         }
-        Log.d("CREATE ", "SIZE OF mWAllets:  " + mWallets.size());
         generated_wallets++;
         Message mKeyMsg = new Message();
         Bundle mData = new Bundle();
@@ -125,17 +119,14 @@ public class createService extends IntentService {
         mData.putInt("wallets",wallets);
         mKeyMsg.setData(mData);
         cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
-        Log.d("C Service w", " " + String.valueOf(generated_wallets) + " " + String.valueOf(wallets));
 
         if (generated_wallets < wallets) {
             submitTask(mKeyPhrase);
         } else {
-            Log.d("ELSE", "!!!!!!!!!!!!");
             clearAllTasks();
             //force bip38 service to service
             if (!isFired) {
                 Intent encryptIntent = new Intent(getApplicationContext(), bip38service.class);
-                Log.d("CREATE PASSWORD", password);
                 encryptIntent.putExtra("password", password);
                 encryptIntent.putExtra("hashMapWallets", mWallets);
                 startService(encryptIntent);

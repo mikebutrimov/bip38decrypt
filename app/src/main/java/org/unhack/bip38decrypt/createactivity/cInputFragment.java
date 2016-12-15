@@ -1,15 +1,10 @@
 package org.unhack.bip38decrypt.createactivity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.bither.bitherj.crypto.bip38.Bip38Util;
 
 import org.unhack.bip38decrypt.R;
 import org.unhack.bip38decrypt.Utils;
@@ -42,7 +36,6 @@ public class cInputFragment extends mFragment implements imFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("INPUT FRG", "CREATE");
         View view;
         view = inflater.inflate(R.layout.create_step_uinput, container, false);
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);

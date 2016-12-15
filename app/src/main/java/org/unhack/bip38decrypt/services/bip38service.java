@@ -21,7 +21,7 @@ import static org.unhack.bip38decrypt.createactivity.cStateFragment.onEncryptKey
 
 public class bip38service extends IntentService {
     private String res,wallet,address;
-    public static  boolean IAM = false;
+    public static  boolean bip38serviceIsRunning = false;
     public static Thread worker;
     public bip38service() {
         super("org.unhack.bip38decrypt.services.bip38service");
@@ -29,23 +29,20 @@ public class bip38service extends IntentService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
-        IAM = true;
+        bip38serviceIsRunning = true;
         wallet = intent.getStringExtra("wallet");
         final String password = intent.getStringExtra("password");
         final String password2 = intent.getStringExtra("password2");
         final boolean needReEncrypt = intent.getBooleanExtra("reencrypt", false);
         final HashMap<String, String> mWalletsToEncrypt = (HashMap<String, String>) intent.getSerializableExtra("hashMapWallets");
-        Log.d("BIP38 SERVICE", "VARS: " + mWalletsToEncrypt.toString() + " is empty" + mWalletsToEncrypt.isEmpty() + "size" + mWalletsToEncrypt.size());
         if (!mWalletsToEncrypt.isEmpty()) {
             worker = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        Log.d("BIP SERVICE", "Stage 1");
                         HashMap<String, String> mResEncryptedWallets = new HashMap<>();
                         if (!password.isEmpty()) {
                             try {
-                                Log.d("BIP SERVICE", "Stage 2");
                                 int encrypted = 0;
                                 for (Map.Entry<String, String> mEntry : mWalletsToEncrypt.entrySet()) {
                                     Message mWalletEncryptedMessage = new Message();
@@ -63,7 +60,6 @@ public class bip38service extends IntentService {
                                         e.printStackTrace();
                                     }
                                     res = Bip38.encryptNoEcMultiply(password, res);
-                                    Log.d("BIP38 RES", res);
                                     mResEncryptedWallets.put(mEntry.getKey(),res);
                                     encrypted++;
                                 }
@@ -73,13 +69,11 @@ public class bip38service extends IntentService {
                         }
                         else {
                             mResEncryptedWallets = new HashMap<>(mWalletsToEncrypt);
-                            Log.d("Bip38 stahge3", "new hashmap size: " + mResEncryptedWallets.size()  );
                         }
                         Intent resIntent = new Intent(MainActivity.INTENT_FILTER);
                         resIntent.putExtra("hashmapWallets", mResEncryptedWallets);
                         sendBroadcast(resIntent);
-                        Log.d("Service ", "After muiltiple encryption");
-                        IAM = false;
+                        bip38serviceIsRunning = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -98,7 +92,6 @@ public class bip38service extends IntentService {
                             res = Bip38.decrypt(wallet, password).toString();
                             DumpedPrivateKey dumpedPrivateKey = new DumpedPrivateKey(res);
                             ECKey ecKey = dumpedPrivateKey.getKey();
-                            Log.d("ecKEY", ecKey.toStringWithPrivate());
                             address = ecKey.toAddress();
                             byte[] privKey = ecKey.getPrivKeyBytes();
                             //convert priv key to uncompressed format
@@ -107,7 +100,6 @@ public class bip38service extends IntentService {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            Log.d("Service addr", address);
                             if (needReEncrypt) {
                                 Intent setStateIntent = new Intent(DecodeActivity.DECODE_STATE_FILTER);
                                 setStateIntent.putExtra("state", getString(R.string.state_encoding));
@@ -118,7 +110,6 @@ public class bip38service extends IntentService {
                         } catch (NullPointerException e) {
                             //probably wrong password / input
                             //ok, we need to create wrong password error fragment
-                            Log.d("Service", "NullPointer!");
                             Bundle mBundle = new Bundle();
                             mBundle.putString("error", getString(R.string.wrongPassword));
                             Intent decodeErrorIntent = new Intent(DecodeActivity.DECODE_INTENT_ERROR);
@@ -135,15 +126,13 @@ public class bip38service extends IntentService {
                             e.printStackTrace();
                         }
                         if (res != null) {
-                            Log.d("Service ", "Before Handler");
                             Intent resIntent = new Intent(MainActivity.INTENT_FILTER);
                             HashMap<String, String> mWallet = new HashMap<>();
                             mWallet.put(address, res);
                             resIntent.putExtra("hashmapWallets", mWallet);
                             sendBroadcast(resIntent);
-                            Log.d("Service ", "After Handler");
                         }
-                        IAM = false;
+                        bip38serviceIsRunning = false;
                     }
                 });
                 worker.setPriority(Thread.MAX_PRIORITY);

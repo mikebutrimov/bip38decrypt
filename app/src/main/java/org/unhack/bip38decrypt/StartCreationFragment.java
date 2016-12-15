@@ -91,7 +91,7 @@ public class StartCreationFragment extends mFragment implements imFragment {
     public void onResume(){
         super.onResume();
         try {
-            if (bip38service.IAM) {
+            if (bip38service.bip38serviceIsRunning) {
                 setMode(true);
             } else {
                 setMode(false);

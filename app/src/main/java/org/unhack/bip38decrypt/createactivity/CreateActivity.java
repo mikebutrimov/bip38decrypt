@@ -92,21 +92,6 @@ public class CreateActivity extends AppCompatActivity {
             }
         };
 
-        /*createErrorHandler = new Handler(){
-            public void handleMessage(android.os.Message msg){
-                //create error fragment, put data into it, set focus to it
-                //we need to bypass error string and button callback
-                //oh fuck, i was looking to the wrong lifecycle scheme
-                Bundle args = msg.getData();
-                cErrorFragment errorFragment = new cErrorFragment();
-                errorFragment.setArguments(args);
-                createPagerAdapter.addFragment(errorFragment);
-                Log.d("errHandler",String.valueOf(createPagerAdapter.getCount()));
-                createPagerAdapter.CoolNavigateToTab(1,TABNUMBER, CreateActivity.createSwipeHandler,false);
-            }
-        };*/
-
-
         setContentView(R.layout.activity_create);
         Intent speedTestIntent = new Intent(this, speedtest.class);
         startService(speedTestIntent);

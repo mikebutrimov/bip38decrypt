@@ -14,25 +14,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 
 import org.unhack.bip38decrypt.adaptors.MixedPagerAdapter;
 import org.unhack.bip38decrypt.createactivity.CreateActivity;
 import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
-
-import java.io.NotSerializableException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -188,5 +180,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(myReceiver);
     }
-
 }
