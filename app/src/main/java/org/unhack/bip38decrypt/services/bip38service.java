@@ -9,8 +9,6 @@ import net.bither.bitherj.crypto.DumpedPrivateKey;
 import net.bither.bitherj.crypto.ECKey;
 import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
-import net.bither.bitherj.net.StreamParser;
-
 import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
 import org.unhack.bip38decrypt.MainActivity;
 import org.unhack.bip38decrypt.R;
