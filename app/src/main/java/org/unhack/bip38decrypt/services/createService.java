@@ -70,7 +70,13 @@ public class createService extends IntentService {
         catch (NullPointerException e){
             e.printStackTrace();
         }
-            generateAddress(mKeyPhrase);
+        Message mKeyMsg = new Message();
+        Bundle mData = new Bundle();
+        mData.putInt("generated_wallets",generated_wallets);
+        mData.putInt("wallets",wallets);
+        mKeyMsg.setData(mData);
+        cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
+        generateAddress(mKeyPhrase);
 
     }
 
@@ -105,12 +111,6 @@ public class createService extends IntentService {
 
     private synchronized void setCreatedKey(ECKey key) {
         while (!getLock());
-        String mWIFKey = Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
-        String lesText = "Address: " + key.toAddress() + "Private Key: " + mWIFKey;
-        if (mWallets.size() < wallets) {
-            mWallets.put(key.toAddress(), mWIFKey);
-        }
-        generated_wallets++;
         Message mKeyMsg = new Message();
         Bundle mData = new Bundle();
         mData.putString("address", key.toAddress());
@@ -119,6 +119,13 @@ public class createService extends IntentService {
         mData.putInt("wallets",wallets);
         mKeyMsg.setData(mData);
         cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
+
+        String mWIFKey = Utils.encodePrivateKeyToWIF(key.getPrivKeyBytes());
+        String lesText = "Address: " + key.toAddress() + "Private Key: " + mWIFKey;
+        if (mWallets.size() < wallets) {
+            mWallets.put(key.toAddress(), mWIFKey);
+        }
+        generated_wallets++;
 
         if (generated_wallets < wallets) {
             submitTask(mKeyPhrase);

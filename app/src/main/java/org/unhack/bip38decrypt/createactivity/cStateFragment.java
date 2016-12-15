@@ -86,13 +86,14 @@ public class cStateFragment extends mFragment implements imFragment {
                 mProgressBar.setProgress(0);
                 try {
                     bip38service.getWorker().interrupt();
+                    if (bip38service.getWorker().isInterrupted()){
+                        Log.d("CreateActivity","thread was interrupted");
+                    }
                 }
                 catch (NullPointerException e){
                     e.printStackTrace();
                 }
-                if (bip38service.getWorker().isInterrupted()){
-                    Log.d("CreateActivity","thread was interrupted");
-                }
+
                 CreateActivity.createPagerAdapter.CoolNavigateToTab(0,CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,true);
             }
         });

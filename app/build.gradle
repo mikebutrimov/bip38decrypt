@@ -3,13 +3,13 @@ targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    buildToolsVersion '24.0.3'
     defaultConfig {
         applicationId 'org.unhack.bip38decrypt'
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 205
-        versionName "2.1.0"
+        versionCode 206
+        versionName "2.1.1"
     }
     buildTypes {
         release {
