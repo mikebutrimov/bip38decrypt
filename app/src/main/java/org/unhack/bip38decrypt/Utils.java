@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.common.base.CharMatcher;
 
+import net.bither.bitherj.crypto.bip38.Bip38;
 import net.bither.bitherj.exception.AddressFormatException;
 import net.bither.bitherj.utils.Base58;
 
@@ -18,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils {
     private static final int BTC_ADDRESS_MAX_LENGTH = 35;
+    private static String ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
     public static byte[] copyOfRange(byte[] from, int start, int end)
     {
@@ -189,9 +191,8 @@ public class Utils {
 
     public static boolean isValidBTCAddressSubstring(final String substring) {
         boolean validity = true;
-        if (!CharMatcher.JAVA_LETTER_OR_DIGIT.matchesAllOf(substring) ||
-                substring.length() > BTC_ADDRESS_MAX_LENGTH ||
-                CharMatcher.anyOf("OIl0").matchesAnyOf(substring)) {
+        if (substring.length() > BTC_ADDRESS_MAX_LENGTH ||
+            !CharMatcher.anyOf(ALPHABET).matchesAllOf(substring)) {
             validity = false;
         }
         return validity;
