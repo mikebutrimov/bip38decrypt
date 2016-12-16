@@ -191,7 +191,8 @@ public class Utils {
 
     public static boolean isValidBTCAddressSubstring(final String substring) {
         boolean validity = true;
-        if (substring.length() > BTC_ADDRESS_MAX_LENGTH ||
+        if (!CharMatcher.JAVA_LETTER_OR_DIGIT.matchesAllOf(substring) ||
+                substring.length() > BTC_ADDRESS_MAX_LENGTH ||
             !CharMatcher.anyOf(ALPHABET).matchesAllOf(substring)) {
             validity = false;
         }
