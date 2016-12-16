@@ -1,13 +1,17 @@
 package org.unhack.bip38decrypt.createactivity;
 
 
+
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -111,6 +115,26 @@ public class cInputFragment extends mFragment implements imFragment {
             }
         });
 
+        editText_vanity.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_ENTER:
+                            onNextClick(v);
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
 
 
         button_back.setOnClickListener(new View.OnClickListener(){
@@ -123,27 +147,7 @@ public class cInputFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (vanity != null && !Utils.isValidBTCAddressSubstring(vanity)) {
-                    Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    totalCreationTarget = Long.valueOf(1);
-                    Bundle mCreateDataBundle = new Bundle();
-                    mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
-                    mCreateDataBundle.putString("vanity", vanity);
-                    int wallets = 1;
-                    try {
-                        wallets = Integer.valueOf(editText_wallets2generate.getText().toString());
-                    } catch (NumberFormatException nfe) {
-                        nfe.printStackTrace();
-                    }
-                    mCreateDataBundle.putInt("wallets", wallets);
-                    mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget * wallets);
-                    cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
-                    mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
-                    CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
-                    CreateActivity.createPagerAdapter.CoolNavigateToTab(1, CreateActivity.TABNUMBER, CreateActivity.createSwipeHandler, false);
-                }
+                onNextClick(v);
             }
         });
         return view;
@@ -179,6 +183,33 @@ public class cInputFragment extends mFragment implements imFragment {
             edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
         }
     }
+
+    public void onNextClick(View v){
+        if (vanity != null && !Utils.isValidBTCAddressSubstring(vanity)) {
+            Toast.makeText(getContext(), getString(R.string.nonbase58), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            totalCreationTarget = Long.valueOf(1);
+            Bundle mCreateDataBundle = new Bundle();
+            mCreateDataBundle.putString("password", edittext_passphrase.getText().toString());
+            mCreateDataBundle.putString("vanity", vanity);
+            int wallets = 1;
+            try {
+                wallets = Integer.valueOf(editText_wallets2generate.getText().toString());
+            } catch (NumberFormatException nfe) {
+                nfe.printStackTrace();
+            }
+            mCreateDataBundle.putInt("wallets", wallets);
+            mCreateDataBundle.putLong("totalCreationTarget", totalCreationTarget * wallets);
+            cPasswordConfirmFragment mcPasswordConfirmFragment = new cPasswordConfirmFragment();
+            mcPasswordConfirmFragment.setArguments(mCreateDataBundle);
+            CreateActivity.createPagerAdapter.addFragment(mcPasswordConfirmFragment);
+            CreateActivity.createPagerAdapter.CoolNavigateToTab(1, CreateActivity.TABNUMBER, CreateActivity.createSwipeHandler, false);
+        }
+    }
+
+
+
 
     @Override
     public void onResume(){

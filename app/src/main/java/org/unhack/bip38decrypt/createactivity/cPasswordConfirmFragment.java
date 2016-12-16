@@ -24,14 +24,14 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
     EditText  edittext_passphrase;
     CheckBox checkbox_showcontent;
     Button button_next, button_back;
-
+    String old_password;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.create_step_confirm_password, container, false);
-        final String old_password = getArguments().get("password").toString();
+        old_password = getArguments().get("password").toString();
 
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_confirm_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_confirm_password);
@@ -47,30 +47,7 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String new_password = edittext_passphrase.getText().toString();
-                if (old_password!=null){
-                    if (new_password.equals(old_password)){
-                        Bundle mDataBundle = getArguments();
-                        cStateFragment mcStateFragment = new cStateFragment();
-                        mcStateFragment.setArguments(mDataBundle);
-                        Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
-                        createIntent.putExtra("vanity", mDataBundle.getString("vanity"));
-                        createIntent.putExtra("wallets", mDataBundle.getInt("wallets",1));
-                        createIntent.putExtra("password", mDataBundle.getString("password"));
-                        getContext().startService(createIntent);
-                        CreateActivity.createPagerAdapter.addFragment(mcStateFragment);
-                        CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
-                    }
-                    else {
-                        //show error
-                        Bundle mErrorBundle = new Bundle();
-                        mErrorBundle.putString("error", "Sorry, passphrases don't match");
-                        cErrorFragment mcErrorFragment = new cErrorFragment();
-                        mcErrorFragment.setArguments(mErrorBundle);
-                        CreateActivity.createPagerAdapter.addFragment(mcErrorFragment);
-                        CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
-                    }
-                }
+                onNextClick(v);
             }
         });
 
@@ -80,15 +57,35 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
                 showContent(v);
             }
         });
-
-
         return view;
-
-
-
-
     }
 
+    public void onNextClick(View v){
+        String new_password = edittext_passphrase.getText().toString();
+        if (old_password!=null){
+            if (new_password.equals(old_password)){
+                Bundle mDataBundle = getArguments();
+                cStateFragment mcStateFragment = new cStateFragment();
+                mcStateFragment.setArguments(mDataBundle);
+                Intent createIntent = new Intent(getActivity().getApplicationContext(), createService.class);
+                createIntent.putExtra("vanity", mDataBundle.getString("vanity"));
+                createIntent.putExtra("wallets", mDataBundle.getInt("wallets",1));
+                createIntent.putExtra("password", mDataBundle.getString("password"));
+                getContext().startService(createIntent);
+                CreateActivity.createPagerAdapter.addFragment(mcStateFragment);
+                CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
+            }
+            else {
+                //show error
+                Bundle mErrorBundle = new Bundle();
+                mErrorBundle.putString("error", "Sorry, passphrases don't match");
+                cErrorFragment mcErrorFragment = new cErrorFragment();
+                mcErrorFragment.setArguments(mErrorBundle);
+                CreateActivity.createPagerAdapter.addFragment(mcErrorFragment);
+                CreateActivity.createPagerAdapter.CoolNavigateToTab(CreateActivity.createPagerAdapter.getCount(),CreateActivity.TABNUMBER,CreateActivity.createSwipeHandler,false);
+            }
+        }
+    }
 
 
     private void showContent(View v){

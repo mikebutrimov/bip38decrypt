@@ -129,6 +129,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/editText_vanity"
         android:hint="Vanity pattern"
+        android:inputType="text"
         android:layout_below="@+id/textView_addresswillbelike"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
