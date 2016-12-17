@@ -1,12 +1,15 @@
 package org.unhack.bip38decrypt.createactivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -32,9 +35,28 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
         View view;
         view = inflater.inflate(R.layout.create_step_confirm_password, container, false);
         old_password = getArguments().get("password").toString();
-
         checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_confirm_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_confirm_password);
+        edittext_passphrase.setOnKeyListener(new View.OnKeyListener()
+        {
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                if (event.getAction() == KeyEvent.ACTION_DOWN)
+                {
+                    switch (keyCode)
+                    {
+                        case KeyEvent.KEYCODE_ENTER:
+                            onNextClick(v);
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            return true;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
         button_back = (Button) view.findViewById(R.id.button_create_confirm_back);
         button_next = (Button) view.findViewById(R.id.button_create_confirm_next);
         button_back.setOnClickListener(new View.OnClickListener(){

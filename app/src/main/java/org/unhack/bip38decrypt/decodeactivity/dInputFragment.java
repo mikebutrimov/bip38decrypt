@@ -1,13 +1,16 @@
 package org.unhack.bip38decrypt.decodeactivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -54,6 +57,26 @@ public class dInputFragment extends mFragment implements imFragment {
         if (reencrypt) {
             view = inflater.inflate(R.layout.decode_step_uinput_re, container, false);
             editText_newpassphrase = (EditText) view.findViewById(R.id.editText_newpassphrase);
+            editText_newpassphrase.setOnKeyListener(new View.OnKeyListener()
+            {
+                public boolean onKey(View v, int keyCode, KeyEvent event)
+                {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN)
+                    {
+                        switch (keyCode)
+                        {
+                            case KeyEvent.KEYCODE_ENTER:
+                                onNextClick(v);
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                return true;
+                            default:
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
         } else {
             view = inflater.inflate(R.layout.decode_step_uinput_nore, container, false);
         }
@@ -77,6 +100,24 @@ public class dInputFragment extends mFragment implements imFragment {
         //check for show content
         showContent(view);
         //set onclick listeners
+        if (!reencrypt) {
+            edittext_passphrase.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                        switch (keyCode) {
+                            case KeyEvent.KEYCODE_ENTER:
+                                onNextClick(v);
+                                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                return true;
+                            default:
+                                break;
+                        }
+                    }
+                    return false;
+                }
+            });
+        }
         checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,35 +134,7 @@ public class dInputFragment extends mFragment implements imFragment {
         button_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("decode","In add fragment");
-                Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
-                try {
-                    if (Bip38.isBip38PrivateKey(edittext_wallet.getText().toString())){
-                        Log.d("InputFRG","Wrong key");
-                        bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
-                        bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
-                        bip38ServiceIntent.putExtra("reencrypt",reencrypt);
-                        try{
-                            bip38ServiceIntent.putExtra("password2",editText_newpassphrase.getText().toString());
-                        }
-                        catch (Exception e){
-
-                        }
-                        getContext().startService(bip38ServiceIntent);
-                        dStateFragment stateFrg = new dStateFragment();
-                        DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
-                        DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
-                    }
-                    else {
-                        Bundle mBundle = new Bundle();
-                        mBundle.putString("error",getString(R.string.notBipKey));
-                        Intent decodeErrorIntent = new Intent(DecodeActivity.DECODE_INTENT_ERROR);
-                        decodeErrorIntent.putExtra("args",mBundle);
-                        getActivity().sendBroadcast(decodeErrorIntent);
-                    }
-                } catch (AddressFormatException e) {
-                    e.printStackTrace();
-                }
+                onNextClick(v);
             }
         });
         button_scan.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +163,39 @@ public class dInputFragment extends mFragment implements imFragment {
         //check for show content
         showContent(getView());
     }
+
+    public void onNextClick(View V){
+        Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
+        try {
+            if (Bip38.isBip38PrivateKey(edittext_wallet.getText().toString())){
+                Log.d("InputFRG","Wrong key");
+                bip38ServiceIntent.putExtra("wallet", edittext_wallet.getText().toString());
+                bip38ServiceIntent.putExtra("password", edittext_passphrase.getText().toString());
+                bip38ServiceIntent.putExtra("reencrypt",reencrypt);
+                try{
+                    bip38ServiceIntent.putExtra("password2",editText_newpassphrase.getText().toString());
+                }
+                catch (Exception e){
+
+                }
+                getContext().startService(bip38ServiceIntent);
+                dStateFragment stateFrg = new dStateFragment();
+                DecodeActivity.decodePagerAdapter.addFragment(stateFrg);
+                DecodeActivity.decodePagerAdapter.CoolNavigateToTab(1,DecodeActivity.TABNUMBER,DecodeActivity.decodeSwipeHandler,false);
+            }
+            else {
+                Bundle mBundle = new Bundle();
+                mBundle.putString("error",getString(R.string.notBipKey));
+                Intent decodeErrorIntent = new Intent(DecodeActivity.DECODE_INTENT_ERROR);
+                decodeErrorIntent.putExtra("args",mBundle);
+                getActivity().sendBroadcast(decodeErrorIntent);
+            }
+        } catch (AddressFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private void showContent(View v){
         if (checkbox_showcontent.isChecked()){
