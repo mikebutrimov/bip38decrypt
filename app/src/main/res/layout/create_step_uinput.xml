@@ -27,7 +27,7 @@
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/button_dec_wallets"
         android:layout_toLeftOf="@+id/button_dec_wallets"
-        android:hint="Wallets to generate (1)"
+        android:hint="@string/wallets_to_generate"
         android:textSize="18sp" />
 
     <Button
@@ -128,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText_vanity"
-        android:hint="Vanity pattern"
+        android:hint="@string/vanity_pattern"
         android:inputType="text"
         android:layout_below="@+id/textView_addresswillbelike"
         android:layout_alignParentRight="true"

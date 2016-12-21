@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="new_passphrase">New passphrase</string>
+    <string name="wallets_to_generate">Wallets to generate (1)</string>
+    <string name="vanity_pattern">Vanity pattern</string>
+    <string name="cores_avail">"Cores available: "</string>
+    <string name="addrs_per_second">\nAddresses per second: %d</string>
+</resources>
