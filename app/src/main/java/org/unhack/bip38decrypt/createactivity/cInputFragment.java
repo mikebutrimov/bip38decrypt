@@ -72,10 +72,10 @@ public class cInputFragment extends mFragment implements imFragment {
             }
         });
 
-        final TextView textView_difficulty = (TextView) view.findViewById(R.id.textView_calculatedDifficulty);
-        final TextView textView_addresswillbelike = (TextView) view.findViewById(R.id.textView_addresswillbelike);
+        //final TextView textView_difficulty = (TextView) view.findViewById(R.id.textView_calculatedDifficulty);
+        //final TextView textView_addresswillbelike = (TextView) view.findViewById(R.id.textView_addresswillbelike);
         final EditText editText_vanity = (EditText) view.findViewById(R.id.editText_vanity);
-        editText_vanity.addTextChangedListener(new TextWatcher() {
+        /*editText_vanity.addTextChangedListener(new TextWatcher() {
             void processtext(){
                 String pattern = editText_vanity.getText().toString().trim();
                 String diff = "0";
@@ -113,7 +113,7 @@ public class cInputFragment extends mFragment implements imFragment {
             public void afterTextChanged(Editable s) {
                 processtext();
             }
-        });
+        });*/
 
         editText_vanity.setOnKeyListener(new View.OnKeyListener()
         {

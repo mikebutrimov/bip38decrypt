@@ -48,6 +48,7 @@
         <activity
             android:name=".createactivity.CreateActivity"
             android:label="@string/title_activity_generate"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
