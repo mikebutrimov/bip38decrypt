@@ -70,14 +70,18 @@ public class createService extends IntentService {
         catch (NullPointerException e){
             e.printStackTrace();
         }
-        Message mKeyMsg = new Message();
-        Bundle mData = new Bundle();
-        mData.putInt("generated_wallets",generated_wallets);
-        mData.putInt("wallets",wallets);
-        mKeyMsg.setData(mData);
-        cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
-        generateAddress(mKeyPhrase);
-
+        try {
+            Message mKeyMsg = new Message();
+            Bundle mData = new Bundle();
+            mData.putInt("generated_wallets", generated_wallets);
+            mData.putInt("wallets", wallets);
+            mKeyMsg.setData(mData);
+            cStateFragment.onCreateKeyHandler.sendMessage(mKeyMsg);
+            generateAddress(mKeyPhrase);
+        }
+        catch (NullPointerException npe){
+            npe.printStackTrace();
+        }
     }
 
     private void submitTask(final String mPhrase){

@@ -37,7 +37,7 @@
     <string name="donate">1AN4vWSQmEE2rpp1DBP8HwVTdPcf1oGje5</string>
     <string name="title_activity_generate">GenerateActivity</string>
     <string name="new_passphrase">Neue Passphrase</string>
-    <string name="wallets_to_generate">Wallets zum Generieren (1)</string>
+    <string name="wallets_to_generate">Wallets zum Generieren</string>
     <string name="vanity_pattern">Vanity-Adressemuster</string>
     <string name="cores_avail">"Verfügbare Kerne: "</string>
     <string name="addrs_per_second">\nAdressen pro Sekunde: %d</string>

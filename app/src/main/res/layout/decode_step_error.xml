@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/bip38_colour">
 
     <TextView
         android:layout_width="match_parent"
@@ -18,5 +19,5 @@
         android:id="@+id/button_oops"
         android:layout_gravity="center_horizontal"
         android:text="@string/button_oops"
-        android:background="@android:drawable/screen_background_light_transparent" />
+        android:background="@drawable/ps__button_flat_digg" />
 </LinearLayout>

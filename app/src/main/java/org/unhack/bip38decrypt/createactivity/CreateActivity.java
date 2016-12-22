@@ -61,9 +61,9 @@ public class CreateActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             int speed = intent.getIntExtra("speed",0);
-            textView_performance = (TextView) findViewById(R.id.textView_performance);
+            //textView_performance = (TextView) findViewById(R.id.textView_performance);
             try {
-                textView_performance.setText(String.format(getString(R.string.cores_avail) + String.valueOf(cores) + getString(R.string.addrs_per_second), speed));
+                //textView_performance.setText(String.format(getString(R.string.cores_avail) + String.valueOf(cores) + getString(R.string.addrs_per_second), speed));
             }
             catch (RuntimeException re){
                 re.printStackTrace();

@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.unhack.bip38decrypt.createactivity.CreateActivity;
 import org.unhack.bip38decrypt.decodeactivity.DecodeActivity;
@@ -38,9 +38,9 @@ public class StartCreationFragment extends mFragment implements imFragment {
         };
 
         View view = inflater.inflate(R.layout.creationfragment_layout, container, false);
-        TextView tv_decode = (TextView) view.findViewById(R.id.textView_decode);
-        TextView tv_reencode = (TextView) view.findViewById(R.id.textView2_reencode);
-        TextView tv_create =  (TextView) view.findViewById(R.id.textView3_create);
+        Button tv_decode = (Button) view.findViewById(R.id.main_button_decode);
+        Button tv_reencode = (Button) view.findViewById(R.id.main_button_reencode);
+        Button tv_create =  (Button) view.findViewById(R.id.main_button_create);
 
         tv_decode.setOnClickListener(new View.OnClickListener() {
             @Override
