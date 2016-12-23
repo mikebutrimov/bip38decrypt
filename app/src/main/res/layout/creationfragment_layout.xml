@@ -126,7 +126,8 @@
                 android:background="@drawable/ps__button_flat_digg"
                 android:paddingLeft="@dimen/fab_margin"
                 android:paddingRight="@dimen/fab_margin"
-                android:textColor="@color/bip38_text_colour" />
+                android:textColor="@color/bip38_text_colour"
+                android:onClick="about" />
         </LinearLayout>
 
         <LinearLayout
