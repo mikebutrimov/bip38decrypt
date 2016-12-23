@@ -25,7 +25,6 @@ import org.unhack.bip38decrypt.services.createService;
 
 public class cPasswordConfirmFragment extends mFragment implements imFragment {
     EditText  edittext_passphrase;
-    CheckBox checkbox_showcontent;
     Button button_next, button_back;
     String old_password;
 
@@ -35,7 +34,7 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
         View view;
         view = inflater.inflate(R.layout.create_step_confirm_password, container, false);
         old_password = getArguments().get("password").toString();
-        checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_confirm_show_content);
+
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_confirm_password);
         edittext_passphrase.setOnKeyListener(new View.OnKeyListener()
         {
@@ -73,12 +72,7 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
             }
         });
 
-        checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showContent(v);
-            }
-        });
+
         return view;
     }
 
@@ -110,19 +104,5 @@ public class cPasswordConfirmFragment extends mFragment implements imFragment {
     }
 
 
-    private void showContent(View v){
-        if (checkbox_showcontent.isChecked()){
-            edittext_passphrase.setTransformationMethod(null);
-        }
-        else {
-            edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
-        }
-    }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        //check for show content
-        showContent(getView());
-    }
 }

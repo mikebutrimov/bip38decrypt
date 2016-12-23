@@ -30,8 +30,7 @@
             android:layout_alignLeft="@id/create_progressBar"
             android:layout_alignTop="@id/create_progressBar"
             android:layout_alignRight="@id/create_progressBar"
-            android:layout_alignBottom="@id/create_progressBar"
-            android:text="dxfghdfghdf" />
+            android:layout_alignBottom="@id/create_progressBar" />
     </RelativeLayout>
 
     <Button
@@ -39,7 +38,9 @@
 
         android:id="@+id/button_cancel"
         android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
         android:text="@string/button_cancel"
-        android:background="@drawable/ps__button_flat_digg" />
+        android:background="@drawable/ps__button_flat_digg"
+        android:layout_marginBottom="8dp"
+        android:minHeight="44dp"
+        android:layout_height="50dp" />
 </LinearLayout>

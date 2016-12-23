@@ -75,7 +75,7 @@ public class cInputFragment extends mFragment implements imFragment {
         //final TextView textView_difficulty = (TextView) view.findViewById(R.id.textView_calculatedDifficulty);
         //final TextView textView_addresswillbelike = (TextView) view.findViewById(R.id.textView_addresswillbelike);
         final EditText editText_vanity = (EditText) view.findViewById(R.id.editText_vanity);
-        /*editText_vanity.addTextChangedListener(new TextWatcher() {
+        editText_vanity.addTextChangedListener(new TextWatcher() {
             void processtext(){
                 String pattern = editText_vanity.getText().toString().trim();
                 String diff = "0";
@@ -90,13 +90,12 @@ public class cInputFragment extends mFragment implements imFragment {
                 vanity = pattern;
                 if (diff != null && Utils.isValidBTCAddressSubstring(pattern)) {
                     totalCreationTarget = Long.valueOf(diff);
-                    textView_difficulty.setText(diff);
+
                 }
                 else {
-                    textView_difficulty.setText(getString(R.string.nonbase58));
+
                 }
 
-                textView_addresswillbelike.setText(getText(R.string.address_will_be) + pattern);
             }
 
             @Override
@@ -113,7 +112,7 @@ public class cInputFragment extends mFragment implements imFragment {
             public void afterTextChanged(Editable s) {
                 processtext();
             }
-        });*/
+        });
 
         editText_vanity.setOnKeyListener(new View.OnKeyListener()
         {
