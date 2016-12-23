@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
@@ -11,7 +11,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textView_error"
         android:layout_weight="0.90"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/button_oops" />
 
     <Button
         android:layout_width="wrap_content"
@@ -19,5 +22,9 @@
         android:id="@+id/button_oops"
         android:layout_gravity="center_horizontal"
         android:text="@string/button_oops"
-        android:background="@drawable/ps__button_flat_digg" />
-</LinearLayout>
+        android:background="@drawable/ps__button_flat_digg"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:minHeight="44dp"
+        android:layout_marginBottom="8dp" />
+</RelativeLayout>

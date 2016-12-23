@@ -13,7 +13,8 @@
         android:layout_weight="0.2"
         android:text="@string/state_decoding"
         android:gravity="center|center_horizontal"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:textSize="14sp" />
 
     <Button
         android:layout_width="wrap_content"

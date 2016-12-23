@@ -188,5 +188,5 @@ public class cInputFragment extends mFragment implements imFragment {
             CreateActivity.createPagerAdapter.CoolNavigateToTab(1, CreateActivity.TABNUMBER, CreateActivity.createSwipeHandler, false);
         }
     }
-    
+
 }
