@@ -34,7 +34,6 @@ public class dInputFragment extends mFragment implements imFragment {
     private boolean reencrypt = false;
     private boolean fired = false;
     EditText edittext_wallet, edittext_passphrase, editText_newpassphrase;
-    CheckBox checkbox_showcontent;
     Button button_back, button_next;
     ImageButton button_scan;
     Bundle mBundle;
@@ -93,12 +92,10 @@ public class dInputFragment extends mFragment implements imFragment {
         //init local vars and view elements
         edittext_wallet = (EditText) view.findViewById(R.id.editText_wallet);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_passphrase);
-        checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_showcontent);
         button_back = (Button) view.findViewById(R.id.button_back);
         button_next = (Button) view.findViewById(R.id.button_next);
         button_scan = (ImageButton) view.findViewById(R.id.button_scan);
         //check for show content
-        showContent(view);
         //set onclick listeners
         if (!reencrypt) {
             edittext_passphrase.setOnKeyListener(new View.OnKeyListener() {
@@ -118,12 +115,6 @@ public class dInputFragment extends mFragment implements imFragment {
                 }
             });
         }
-        checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showContent(v);
-            }
-        });
 
         button_back.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -157,12 +148,6 @@ public class dInputFragment extends mFragment implements imFragment {
         return view;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        //check for show content
-        showContent(getView());
-    }
 
     public void onNextClick(View V){
         Intent bip38ServiceIntent = new Intent(getActivity().getApplicationContext(), bip38service.class);
@@ -197,26 +182,6 @@ public class dInputFragment extends mFragment implements imFragment {
 
 
 
-    private void showContent(View v){
-        if (checkbox_showcontent.isChecked()){
-            edittext_passphrase.setTransformationMethod(null);
-            try {
-                editText_newpassphrase.setTransformationMethod(null);
-            }
-            catch (Exception e){
-
-            }
-        }
-        else {
-            edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
-            try {
-                editText_newpassphrase.setTransformationMethod(new PasswordTransformationMethod());
-            }
-            catch (Exception e){
-
-            }
-        }
-    }
 
     public void scanQr(){
         IntentIntegrator integrator = new IntentIntegrator(getActivity());
