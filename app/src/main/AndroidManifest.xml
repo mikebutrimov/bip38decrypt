@@ -49,6 +49,7 @@
             android:name=".createactivity.CreateActivity"
             android:label="@string/title_activity_generate"
             android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

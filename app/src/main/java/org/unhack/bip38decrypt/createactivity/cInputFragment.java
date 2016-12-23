@@ -42,7 +42,7 @@ public class cInputFragment extends mFragment implements imFragment {
                              Bundle savedInstanceState) {
         View view;
         view = inflater.inflate(R.layout.create_step_uinput, container, false);
-        checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);
+        //checkbox_showcontent = (CheckBox) view.findViewById(R.id.checkBox_create_show_content);
         edittext_passphrase = (EditText) view.findViewById(R.id.editText_create_password);
         editText_wallets2generate = (EditText) view.findViewById(R.id.editText_wallets2generate);
         button_inc_wallets = (Button) view.findViewById(R.id.button_inc_wallets);
@@ -65,12 +65,12 @@ public class cInputFragment extends mFragment implements imFragment {
         });
 
 
-        checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
+/*        checkbox_showcontent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showContent(v);
             }
-        });
+        });*/
 
         //final TextView textView_difficulty = (TextView) view.findViewById(R.id.textView_calculatedDifficulty);
         //final TextView textView_addresswillbelike = (TextView) view.findViewById(R.id.textView_addresswillbelike);
@@ -176,12 +176,12 @@ public class cInputFragment extends mFragment implements imFragment {
     }
 
     private void showContent(View v){
-        if (checkbox_showcontent.isChecked()){
+        /*if (checkbox_showcontent.isChecked()){
             edittext_passphrase.setTransformationMethod(null);
         }
         else {
             edittext_passphrase.setTransformationMethod(new PasswordTransformationMethod());
-        }
+        }*/
     }
 
     public void onNextClick(View v){

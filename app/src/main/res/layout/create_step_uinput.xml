@@ -1,157 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:gravity="bottom">
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/bip38_colour"
-    >
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-
-
-    <EditText
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText_create_password"
-        android:textColorHint="?attr/editTextColor"
-        android:layout_below="@+id/textView_passphrase"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="16dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:id="@+id/scrollView">
 
-    <CheckBox
-        android:text="@string/checkBoxShowPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkBox_create_show_content"
-        android:layout_below="@+id/editText_create_password"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp" />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/RelativeLayoutContainer"
+            android:background="@color/bip38_colour">
+
+            <TextView
+                android:text="@string/wallets_to_generate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_wallets_to_generate"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_marginLeft="16dp"/>
 
 
-    <TextView
-        android:text="@string/edittext_passphrase"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_passphrase"
-        android:layout_below="@+id/button_dec_wallets"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="16dp" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/editText_wallets2generate"
+                android:textColorHint="?attr/editTextColor"
+                android:background="@drawable/ps__button_flat_digg"
+                android:text="1"
+                android:layout_below="@+id/textView_wallets_to_generate"
+                android:layout_alignLeft="@+id/textView_wallets_to_generate"
+                android:layout_alignStart="@+id/textView_wallets_to_generate"
+                android:layout_toLeftOf="@+id/button_dec_wallets"
+                android:layout_toStartOf="@+id/button_dec_wallets"
+                android:layout_marginTop="8dp" />
 
 
-    <TextView
-        android:text="@string/vanity_pattern"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_vanity_pattern"
-        android:layout_below="@+id/checkBox_create_show_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="16dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_inc_wallets"
+                android:background="@drawable/ps__button_flat_digg"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/button_dec_wallets"
+                android:layout_alignTop="@+id/button_dec_wallets"
+                android:layout_marginRight="16dp"
+                android:textSize="22sp"
+                android:layout_marginLeft="4dp"
+                android:text="+" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText_vanity"
-        android:inputType="text"
-        android:textColorHint="?attr/editTextColor"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_below="@+id/textView_vanity_pattern"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="16dp"
-        android:text="5fds" />
+            <Button
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_dec_wallets"
+                android:background="@drawable/ps__button_flat_digg"
+                android:layout_alignBottom="@+id/editText_wallets2generate"
+                android:layout_toLeftOf="@+id/button_inc_wallets"
+                android:layout_toStartOf="@+id/button_inc_wallets"
+                android:layout_alignTop="@+id/editText_wallets2generate"
+                android:layout_marginLeft="4dp"
+                android:textSize="22sp" />
 
-    <Button
-        android:text="+"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_inc_wallets"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/button_dec_wallets"
-        android:layout_alignTop="@+id/button_dec_wallets"
-        android:layout_marginRight="16dp" />
 
-    <Button
-        android:text="-"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_dec_wallets"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_alignBottom="@+id/editText_wallets2generate"
-        android:layout_toLeftOf="@+id/button_inc_wallets"
-        android:layout_toStartOf="@+id/button_inc_wallets"
-        android:layout_alignTop="@+id/editText_wallets2generate" />
+            <TextView
+                android:text="@string/edittext_passphrase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_passphrase"
+                android:layout_below="@+id/editText_wallets2generate"
+                android:layout_alignLeft="@+id/editText_wallets2generate"
+                android:layout_alignStart="@+id/editText_wallets2generate"
+                android:layout_alignRight="@+id/button_inc_wallets"
+                android:layout_alignEnd="@+id/button_inc_wallets"
+                android:layout_marginTop="8dp" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editText_wallets2generate"
-        android:textColorHint="?attr/editTextColor"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_below="@+id/textView_wallets_to_generate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:text="1"
-        android:layout_toLeftOf="@+id/button_dec_wallets"
-        android:layout_toStartOf="@+id/button_dec_wallets"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="16dp" />
 
-    <TextView
-        android:text="@string/wallets_to_generate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_wallets_to_generate"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp" />
+            <RelativeLayout
+                android:id="@+id/RelativeLayoutPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView_passphrase"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
-        android:text="@string/button_back"
-        android:id="@+id/button_create_back"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_below="@+id/editText_vanity"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    app:passwordToggleTint="@color/colorAccent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_chevron_right_black_24dp"
-        android:text="@string/button_next"
-        android:id="@+id/button_create_next"
-        android:background="@drawable/ps__button_flat_digg"
-        android:layout_below="@+id/editText_vanity"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp" />
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/editText_create_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:selectAllOnFocus="false"
+                        android:background="@drawable/bip38_background_dark" />
+                </android.support.design.widget.TextInputLayout>
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:text="@string/vanity_pattern"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView_vanity_pattern"
+                android:layout_below="@+id/RelativeLayoutPassword"
+                android:layout_alignLeft="@+id/textView_passphrase"
+                android:layout_alignStart="@+id/textView_passphrase"
+                android:layout_marginTop="8dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText_vanity"
+                android:inputType="text"
+                android:textColorHint="?attr/editTextColor"
+                android:background="@drawable/ps__button_flat_digg"
+                android:layout_below="@+id/textView_vanity_pattern"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_alignStart="@+id/textView_vanity_pattern"
+                android:layout_alignEnd="@+id/textView_passphrase" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/bip38_colour"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/editText_vanity"
+                android:layout_height="48dp">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_chevron_left_black_24dp"
+                    android:text="@string/button_back"
+                    android:id="@+id/button_create_back"
+                    android:background="@drawable/ps__button_flat_digg"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:minHeight="44dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableRight="@drawable/ic_chevron_right_black_24dp"
+                    android:text="@string/button_next"
+                    android:id="@+id/button_create_next"
+                    android:background="@drawable/ps__button_flat_digg"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:minHeight="44dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp" />
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
 
 </RelativeLayout>
-</ScrollView>
