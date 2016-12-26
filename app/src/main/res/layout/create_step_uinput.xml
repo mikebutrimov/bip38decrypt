@@ -96,7 +96,7 @@
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    app:passwordToggleTint="@color/colorAccent"
+                    app:passwordToggleDrawable="@drawable/ic_passwd_selector"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
                     android:layout_height="wrap_content"

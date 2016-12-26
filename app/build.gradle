@@ -8,8 +8,8 @@ android {
         applicationId 'org.unhack.bip38decrypt'
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 213
-        versionName "2.1.7b"
+        versionCode 214
+        versionName "2.1.8"
     }
     buildTypes {
         release {
